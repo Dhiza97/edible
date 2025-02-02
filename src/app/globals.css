@@ -47,3 +47,54 @@ a.active {
     --t: 0.3s;
     color: #fff;
   }
+
+  .btn-order {
+    position: relative;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    min-width: 100px;
+    z-index: 1;
+  }
+  
+  .neon-pulse {
+    background: transparent;
+    border: 1px solid #EB5A3C;
+    box-shadow: 0 0 10px #EB5A3C;
+    overflow: visible;
+  }
+  
+  .neon-pulse::before,
+  .neon-pulse::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border: 1px solid #EB5A3C;
+    border-radius: inherit;
+    animation: pulseOut 2s ease-out infinite;
+    opacity: 0;
+  }
+  
+  .neon-pulse::after {
+    animation-delay: 1s;
+  }
+
+  .neon-pulse:hover {
+    border: 1px solid #fff;
+    box-shadow: 0 0 10px #fff;
+  }
+  
+  @keyframes pulseOut {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }

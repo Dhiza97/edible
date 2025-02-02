@@ -15,8 +15,8 @@ export default {
         primaryColor: "#EB5A3C"
       },
       fontFamily: {
-        Outfit: ["Outfit", "sans-serif"],
-        Ovo: ["Ovo", "serif"],
+        Poppins: ["Poppins", "san-serif"],
+        Fruktur: ["Fruktur", "cursive"],
       },
       boxShadow: {
         'black': '4px 4px #000',
