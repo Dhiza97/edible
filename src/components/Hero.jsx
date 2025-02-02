@@ -7,13 +7,21 @@ const images = ["burger.png", "spag.png", "taco.png"];
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true); // Ensures rendering happens only after hydration
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isMounted]);
+
+  if (!isMounted) return null; // Prevents mismatched server/client output
 
   return (
     <div className="relative w-full h-screen overflow-hidden px-5 lg:px-8 xl:px-[8%] pt-24">
@@ -47,18 +55,41 @@ const Hero = () => {
         </div>
 
         {/* Content Section */}
-        <div className="relative z-10 flex flex-col items-start justify-center h-full text-white w-1/2">
-          <h1 className="text-6xl font-semibold font-Fruktur">
-            Welcome to <span className="text-primaryColor font-Fruktur">Edible</span> – A
+        <motion.div
+          className="relative z-10 flex flex-col items-start justify-center h-full text-white w-1/2"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1 }}
+        >
+          <motion.h1
+            className="text-6xl font-semibold font-Fruktur"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
+            Welcome to{" "}
+            <span className="text-primaryColor font-Fruktur">Edible</span> – A
             Taste of Perfection
-          </h1>
-          <p className="text-base mt-6">
+          </motion.h1>
+
+          <motion.p
+            className="text-base mt-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+          >
             Fresh ingredients, bold flavors, and unforgettable meals. Indulge in
             a dining experience crafted with passion.
-          </p>
+          </motion.p>
 
-          <button className="btn-order px-7 py-4 mt-6 text-primaryColor rounded-full neon-pulse hover:text-white">ORDER NOW</button>
-        </div>
+          <motion.button
+            className="btn-order px-7 py-4 mt-6 text-primaryColor rounded-full neon-pulse hover:text-white"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            ORDER NOW
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );
