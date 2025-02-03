@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const Category = () => {
   return (
-    <div className="text-center py-10 px-5 lg:px-8 xl:px-[8%]">
+    <div className="text-center py-10 px-5 lg:px-8 xl:px-[8%] my-20">
       <h2 className="font-Fruktur text-4xl">
         Explore Our{" "}
         <span className="text-primaryColor font-Fruktur">Categories</span>
@@ -29,7 +29,7 @@ const Category = () => {
                     </div>
                     <h3 className="text-lg text-[#DF9755] font-semibold mt-6">{category.title}</h3>
                   </div>
-                  
+
                   {/* Back */}
                   <div className="flip-card-back absolute w-full h-full bg-primaryColor text-white flex items-center justify-center rounded-xl p-4 opacity-0">
                     <p>{category.description}</p>

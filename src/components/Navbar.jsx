@@ -7,6 +7,7 @@ import { assets } from "../app/assets/assets";
 import { CiUser } from "react-icons/ci";
 import { TfiClose } from "react-icons/tfi";
 import { PiHamburger } from "react-icons/pi";
+import { IoBagOutline } from "react-icons/io5";
 
 const Navbar = () => {
   const [isScroll, setIsScroll] = useState(false);
@@ -61,7 +62,11 @@ const Navbar = () => {
         </li>
       </ul>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between gap-5 items-center">
+        <Link href={'/cart'}>
+        <IoBagOutline className="text-3xl text-primaryColor" />
+        </Link>
+
         {token ? (
           <CiUser className="text-3xl text-primaryColor hover:cursor-pointer" />
         ) : (
