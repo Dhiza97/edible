@@ -1,7 +1,5 @@
 import logo_light from "./Edible1.png";
 import logo_dark from "./Edible2.png";
-import parallax1 from "./parallax1.jpg";
-import parallax2 from "./parallax2.jpg";
 import { RiDrinks2Fill } from "react-icons/ri";
 import { IoFastFood } from "react-icons/io5";
 import { LuDessert } from "react-icons/lu";
@@ -10,8 +8,6 @@ import { FaBowlFood } from "react-icons/fa6";
 export const assets = {
   logo_light,
   logo_dark,
-  parallax1,
-  parallax2,
 };
 
 export const category = [
@@ -42,5 +38,44 @@ export const category = [
     title: "Main Dish",
     description: "Get your favorite pasta cooked to perfection with our fresh ingredients.",
     link: "/main-dishes",
+  }
+]
+
+export const products = [
+  {
+    id: 1,
+    title: "Grilled Chicken Sandwich",
+    price: 8.99,
+    image: "/burg.png",
+  },
+  {
+    id: 2,
+    title: "Mozarella Pizza",
+    price: 7.99,
+    image: "/pizza.png",
+  },
+  {
+    id: 3,
+    title: "Baked Salmon",
+    price: 9.99,
+    image: "/pesto.png",
+  },
+  {
+    id: 4,
+    title: "Chocolate Cheesecake",
+    price: 5.99,
+    image: "/smoothie.png",
+  },
+  {
+    id: 5,
+    title: "Beef Stroganoff",
+    price: 12.99,
+    image: "/burg.png",
+  },
+  {
+    id: 6,
+    title: "Pineapple Smoothie",
+    price: 4.99,
+    image: "/pesto.png",
   }
 ]

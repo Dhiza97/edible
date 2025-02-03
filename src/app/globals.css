@@ -130,3 +130,30 @@ a.active {
   align-items: center;
   justify-content: center;
 }
+
+/* Parallax */
+.parallax {
+  min-height: 500px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+}
+
+.text-gradient1 {
+  font-size: 3.5rem;
+  font-family: 'Fruktur', cursive;
+  background: linear-gradient(to right, rgb(255, 192, 76), rgb(237, 6, 6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient2 {
+  font-size: 3.5rem;
+  font-family: 'Fruktur', cursive;
+  background: -webkit-linear-gradient(#000, #f48d17);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
