@@ -10,9 +10,9 @@ export default function Home() {
     <Navbar />
     <Hero />
     <Category />
-    <Parallax image="/parallax1.jpg" text="Special Snacks and Meals" textStyle="pl-24 text-start text-gradient1" />
+    <Parallax image="/parallax1.jpg" text="Special Snacks and Meals" textStyle="px-5 lg:px-8 xl:px-[8%] text-start text-gradient1" />
     <New />
-    <Parallax image="/parallax2.jpg" text="Delicious Desserts" textStyle="pl-24 text-end text-gradient2" />
+    <Parallax image="/parallax2.jpg" text="Delicious Desserts" textStyle="px-5 lg:px-8 xl:px-[8%] text-end text-gradient2" />
     </>
   );
 }

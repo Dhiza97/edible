@@ -37,9 +37,9 @@ const Hero = () => {
         Your browser does not support the video tag.
       </video>
 
-      <div className="flex flex-row-reverse items-center justify-center">
+      <div className="flex flex-col lg:flex-row items-center justify-center">
         {/* Images on the Right Side with Fade Animation */}
-        <div className="w-1/2 transform">
+        <div className="w-full lg:w-1/2 transform">
           <AnimatePresence mode="wait">
             <motion.img
               key={currentIndex}
@@ -56,13 +56,13 @@ const Hero = () => {
 
         {/* Content Section */}
         <motion.div
-          className="relative z-10 flex flex-col items-start justify-center h-full text-white w-1/2"
+          className="relative z-10 flex flex-col items-center lg:items-start justify-center h-full text-white w-full lg:w-1/2 px-5"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
         >
           <motion.h1
-            className="text-6xl font-semibold font-Fruktur"
+            className="text-3xl sm:text-5xl md:text-6xl font-semibold font-Fruktur"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
@@ -73,7 +73,7 @@ const Hero = () => {
           </motion.h1>
 
           <motion.p
-            className="text-base mt-6"
+            className="text-base sm:text-lg mt-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
