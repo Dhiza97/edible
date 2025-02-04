@@ -35,7 +35,7 @@ const Card = ({ product }) => {
           <h3 className="mt-4 text-lg font-medium text-gray-900">{product.title}</h3>
           <p className="mt-1.5 text-sm text-gray-700">${product.price.toFixed(2)}</p>
 
-          <button className="block w-full rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105">
+          <button className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105">
             Add to Cart
           </button>
         </div>
