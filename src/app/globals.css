@@ -100,35 +100,44 @@ a.active {
 }
 
 /* Card flip effect */
-.flip-card {
+.card-container {
   perspective: 1000px;
 }
 
-.flip-card-inner {
-  width: 100%;
-  height: 100%;
+.card {
+  width: 300px;
+  height: 450px;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.6s;
 }
 
-.flip-card:hover .flip-card-inner {
+.card-container:hover .card {
   transform: rotateY(180deg);
 }
 
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
+.face {
   width: 100%;
   height: 100%;
+  position: absolute;
   backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.flip-card-back {
+.front {
+  background-color: #fff;
+}
+
+.back {
+  background-color: #DF9755;
+  color: white;
   transform: rotateY(180deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Parallax */
