@@ -1,4 +1,5 @@
 import Category from "../components/Category";
+import Footer from "../components/Footer";
 import Gallery from "../components/Gallery";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
@@ -17,6 +18,7 @@ export default function Home() {
     <Parallax image="/parallax2.jpg" text="Delicious Desserts" textStyle="px-5 lg:px-8 xl:px-[8%] text-end sm:text-end text-gradient2" />
     <Gallery />
     <Testimonials />
+    <Footer />
     </>
   );
 }
