@@ -7,21 +7,13 @@ const images = ["burger.png", "spag.png", "taco.png"];
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true); // Ensures rendering happens only after hydration
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, [isMounted]);
-
-  if (!isMounted) return null; // Prevents mismatched server/client output
+  }, []);
 
   return (
     <div className="relative w-full h-screen overflow-hidden px-5 lg:px-8 xl:px-[8%] pt-24">
@@ -37,7 +29,7 @@ const Hero = () => {
         Your browser does not support the video tag.
       </video>
 
-      <div className="flex flex-col lg:flex-row items-center justify-center">
+      <div className="flex flex-col sm:flex-row lg:flex-row items-center justify-center">
         {/* Images on the Right Side with Fade Animation */}
         <div className="w-full lg:w-1/2 transform">
           <AnimatePresence mode="wait">
@@ -90,6 +82,10 @@ const Hero = () => {
             ORDER NOW
           </motion.button>
         </motion.div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 w-full">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill0pacity="1" d="M0,224L80,208C160,192,320,160,480,170.7C640,181,800,235,960,245.3C1120,256,1280,224,1360,208L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
       </div>
     </div>
   );

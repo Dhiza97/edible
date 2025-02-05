@@ -5,7 +5,7 @@ import Link from "next/link";
 const Category = () => {
   return (
     <div className="text-center py-10 px-5 lg:px-8 xl:px-[8%] my-20">
-      <h2 className="font-Fruktur text-4xl">
+      <h2 className="font-Fruktur text-5xl">
         Explore Our{" "}
         <span className="text-primaryColor font-Fruktur">Categories</span>
       </h2>
