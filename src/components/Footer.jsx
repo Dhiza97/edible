@@ -1,22 +1,39 @@
 import Image from "next/image";
 import React from "react";
 import { assets } from "../app/assets/assets";
-import { CiFacebook } from "react-icons/ci";
-import { CiInstagram } from "react-icons/ci";
+import { AiOutlineFacebook } from "react-icons/ai";
+import { CgInstagram } from "react-icons/cg";
 import { RiTwitterXLine } from "react-icons/ri";
 
 const Footer = () => {
   return (
     <footer className="bg-gray-100">
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-        <div>
-            <Image src={assets.logo_dark} alt="" className="mx-auto w-40" />
-        </div>
+        <div className="mx-auto max-w-md">
+          <strong className="block text-center text-6xl font-bold font-Fruktur text-gray-900 sm:text-3xl">
+            Want us to email you with the latest <span className="font-Fruktur text-primaryColor">Juicy</span> news?
+          </strong>
 
-        <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500 text-sm">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt
-          consequuntur amet culpa cum itaque neque.
-        </p>
+          <form className="mt-6">
+            <div className="relative max-w-lg">
+              <label className="sr-only" htmlFor="email">
+                {" "}
+                Email{" "}
+              </label>
+
+              <input
+                className="w-full rounded-full border-gray-200 bg-gray-100 p-4 pe-32 text-sm font-medium focus:outline-primaryColor"
+                id="email"
+                type="email"
+                placeholder="johndoe@example.com"
+              />
+
+              <button className="absolute end-1 top-1/2 -translate-y-1/2 rounded-full bg-primaryColor px-5 py-3 text-sm font-medium text-white transition hover:text-black">
+                Subscribe
+              </button>
+            </div>
+          </form>
+        </div>
 
         <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
           <li>
@@ -45,27 +62,7 @@ const Footer = () => {
               href="#"
             >
               {" "}
-              History{" "}
-            </a>
-          </li>
-
-          <li>
-            <a
-              className="text-gray-700 transition hover:text-gray-700/75"
-              href="#"
-            >
-              {" "}
               Services{" "}
-            </a>
-          </li>
-
-          <li>
-            <a
-              className="text-gray-700 transition hover:text-gray-700/75"
-              href="#"
-            >
-              {" "}
-              Projects{" "}
             </a>
           </li>
 
@@ -89,7 +86,7 @@ const Footer = () => {
               className="text-gray-700 transition hover:text-gray-700/75"
             >
               <span className="sr-only">Facebook</span>
-              <CiFacebook className="text-[#DF9755] text-2xl" />
+              <AiOutlineFacebook className="text-[#DF9755] text-2xl" />
             </a>
           </li>
 
@@ -101,7 +98,7 @@ const Footer = () => {
               className="text-gray-700 transition hover:text-gray-700/75"
             >
               <span className="sr-only">Instagram</span>
-              <CiInstagram className="text-[#DF9755] text-2xl" />
+              <CgInstagram className="text-[#DF9755] text-2xl" />
             </a>
           </li>
 
@@ -118,8 +115,30 @@ const Footer = () => {
           </li>
         </ul>
       </div>
+      <footer className="bg-gray-50">
+        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="sm:flex sm:items-center sm:justify-between">
+            <div className="flex justify-center text-teal-600 sm:justify-start">
+              <Image src={assets.logo_dark} alt="Logo" className="w-20" />
+            </div>
+
+            <p className="mt-4 text-center text-sm text-gray-500 lg:mt-0 lg:text-right">
+              Copyright &copy; 2025. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </footer>
   );
 };
 
 export default Footer;
+
+{
+  /*
+  Heads up! 👋
+
+  Plugins:
+    - @tailwindcss/forms
+*/
+}
