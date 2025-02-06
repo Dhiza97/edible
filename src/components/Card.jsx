@@ -25,14 +25,14 @@ const Card = ({ product }) => {
 
         <Image
           src={product.image}
-          alt={product.title}
+          alt={product.name}
           width={400}
           height={300}
           className="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
         />
 
         <div className="relative border border-gray-100 bg-white p-6">
-          <h3 className="mt-4 text-lg font-medium text-gray-900">{product.title}</h3>
+          <h3 className="mt-4 text-lg font-medium text-gray-900">{product.name}</h3>
           <p className="mt-1.5 text-sm text-gray-700">${product.price.toFixed(2)}</p>
 
           <button className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105">

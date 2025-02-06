@@ -37,10 +37,10 @@ const Page = () => {
 
     switch (sortOption) {
       case "A-Z":
-        filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.name));
+        filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
         break;
       case "Z-A":
-        filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.name));
+        filtered = [...filtered].sort((a, b) => b.name.localeCompare(a.name));
         break;
       case "low-to-high":
         filtered = [...filtered].sort((a, b) => a.price - b.price);
