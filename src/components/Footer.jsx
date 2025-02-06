@@ -18,7 +18,7 @@ const Footer = () => {
       <footer className="bg-gray-100">
         <div className="mx-auto max-w-5xl px-4 pb-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-md">
-            <strong className="block text-center text-4xl sm:text-3xl md:text-5xl lg:text-6xl font-bold font-Fruktur text-gray-900">
+            <strong className="block text-center text-4xl sm:text-3xl lg:text-5xl font-bold font-Fruktur text-gray-900">
               Want us to email you with the latest{" "}
               <span className="font-Fruktur text-primaryColor">Juicy</span>{" "}
               news?
