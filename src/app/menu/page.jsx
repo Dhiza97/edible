@@ -103,8 +103,11 @@ const Page = () => {
           />
 
           <span className="absolute inset-y-0 end-0 grid place-content-center">
-            <button type="button" className="text-2xl text-gray-700 pr-5 hover:scale-110 duration-300 hover:text-primaryColor">
-            <IoIosSearch />
+            <button
+              type="button"
+              className="text-2xl text-gray-700 pr-5 hover:scale-110 duration-300 hover:text-primaryColor"
+            >
+              <IoIosSearch />
             </button>
           </span>
         </div>
@@ -143,17 +146,12 @@ const Page = () => {
             {categories.map((category) => (
               <button
                 key={category}
-                className={`px-4 py-2 rounded-md ${
-                  selectedCategory ===
-                  category.replace(/\s+/g, "-").toLowerCase()
+                className={`px-3 py-2 text-sm rounded-md ${
+                  selectedCategory === category
                     ? "bg-primaryColor text-white"
                     : "bg-gray-200 text-gray-700"
                 }`}
-                onClick={() =>
-                  setSelectedCategory(
-                    category.replace(/\s+/g, "-").toLowerCase()
-                  )
-                }
+                onClick={() => setSelectedCategory(category)}
               >
                 {category}
               </button>
@@ -168,7 +166,7 @@ const Page = () => {
             <select
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
-              className="ml-2 p-2 border rounded-md"
+              className="ml-2 p-2 border rounded-md text-sm"
             >
               <option value="default">Default</option>
               <option value="A-Z">A-Z</option>
