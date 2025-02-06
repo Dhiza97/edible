@@ -36,7 +36,7 @@ const Navbar = () => {
     <nav
       className={`flex justify-between items-center w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 main-nav z-50 ${
         isScroll
-          ? "bg-[#E2DF4C] bg-opacity-50 backdrop-blur-lg shadow-sm dark:bg-darkTheme dark:shadow-white/20"
+          ? "bg-[#E2DF4C] text-white bg-opacity-50 backdrop-blur-lg shadow-sm dark:bg-darkTheme dark:shadow-white/20"
           : ""
       }`}
     >
