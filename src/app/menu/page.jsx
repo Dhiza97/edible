@@ -8,8 +8,8 @@ import { products } from "../assets/assets";
 import Card from "@/src/components/Card";
 import { IoChevronDownOutline, IoFilterOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
-import { FcNext } from "react-icons/fc";
-import { FcPrevious } from "react-icons/fc";
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
 
 const categories = [
   "All",
@@ -206,7 +206,7 @@ const Page = () => {
                 currentPage === 1 ? "bg-gray-300" : "bg-primaryColor text-white"
               }`}
             >
-              <FcPrevious />
+              <GrPrevious />
             </button>
 
             <span className="px-4 py-2 bg-gray-200 rounded-md">
@@ -222,7 +222,7 @@ const Page = () => {
                   : "bg-primaryColor text-white"
               }`}
             >
-              <FcNext className="text-white" />
+              <GrNext className="text-white" />
             </button>
           </div>
         )}
