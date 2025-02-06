@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import { products } from "../assets/assets";
 import Card from "@/src/components/Card";
 import { IoChevronDownOutline, IoFilterOutline } from "react-icons/io5";
+import { IoIosSearch } from "react-icons/io";
 
 const categories = [
   "All",
@@ -23,10 +24,12 @@ const Page = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("default");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     let filtered = products;
 
+    // Filter by category
     if (selectedCategory !== "All") {
       filtered = products.filter(
         (product) =>
@@ -35,6 +38,14 @@ const Page = () => {
       );
     }
 
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Sorting
     switch (sortOption) {
       case "A-Z":
         filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
@@ -53,7 +64,7 @@ const Page = () => {
     }
 
     setMenu(filtered);
-  }, [selectedCategory, sortOption]);
+  }, [selectedCategory, sortOption, searchQuery]);
 
   return (
     <>
@@ -63,6 +74,7 @@ const Page = () => {
           Our <span className="text-primaryColor font-Fruktur">Menu</span>
         </h1>
 
+        {/* Banner */}
         <div className="flex flex-col lg:flex-row items-center gap-8 bg-primaryColor rounded-2xl mx-auto pt-6 px-6 md:px-12 w-full max-w-6xl">
           <p className="text-white font-Fruktur text-xl sm:text-2xl md:text-3xl leading-8 sm:leading-10 text-center lg:text-left w-full lg:w-1/2">
             Explore our delicious and carefully curated selection of meals,
@@ -78,6 +90,23 @@ const Page = () => {
               className="rounded-lg"
             />
           </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative w-full sm:w-1/2 mt-20 px-4 py-2 bg-gray-200 rounded-full">
+          <input
+            type="text"
+            placeholder="Search for a dish..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-md border-gray-200 bg-gray-200 py-2.5 pe-10 shadow-xs sm:text-sm focus:outline-none"
+          />
+
+          <span className="absolute inset-y-0 end-0 grid place-content-center">
+            <button type="button" className="text-2xl text-gray-700 pr-5 hover:scale-110 duration-300 hover:text-primaryColor">
+            <IoIosSearch />
+            </button>
+          </span>
         </div>
 
         <div className="flex flex-col md:flex-row flex-wrap md:justify-between items-center space-y-3 mt-20 w-full">
@@ -108,8 +137,8 @@ const Page = () => {
               </div>
             )}
           </div>
-            
-            {/* For Desktop */}
+
+          {/* For Desktop */}
           <div className="hidden md:flex flex-wrap gap-4">
             {categories.map((category) => (
               <button
