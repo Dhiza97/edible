@@ -8,17 +8,17 @@ import { RiTwitterXLine } from "react-icons/ri";
 const Footer = () => {
   return (
     <>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path
-            fill="#F3F4F6"
-            fillOpacity="1"
-            d="M0,224L80,208C160,192,320,160,480,170.7C640,181,800,235,960,245.3C1120,256,1280,224,1360,208L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
-          ></path>
-        </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path
+          fill="#F3F4F6"
+          fillOpacity="1"
+          d="M0,224L80,208C160,192,320,160,480,170.7C640,181,800,235,960,245.3C1120,256,1280,224,1360,208L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
+        ></path>
+      </svg>
       <footer className="bg-gray-100">
         <div className="mx-auto max-w-5xl px-4 pb-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-md">
-            <strong className="block text-center text-6xl font-bold font-Fruktur text-gray-900 sm:text-3xl">
+            <strong className="block text-center text-4xl sm:text-3xl md:text-5xl lg:text-6xl font-bold font-Fruktur text-gray-900">
               Want us to email you with the latest{" "}
               <span className="font-Fruktur text-primaryColor">Juicy</span>{" "}
               news?
