@@ -220,3 +220,54 @@ export const products = [
     category: "main-dishes",
   },
 ];
+
+export const team = [
+  {
+    id: 1,
+    name: "Dhiza Garbs",
+    image: "/team1.png",
+    position: "Founder & CEO",
+  },
+  {
+    id: 2,
+    name: "Sophia Adeyemi",
+    image: "/team2.png",
+    position: "Head Chef",
+  },
+  {
+    id: 3,
+    name: "David Okoro",
+    image: "/team3.png",
+    position: "Operations Manager",
+  },
+  {
+    id: 4,
+    name: "Fayla Bello",
+    image: "/team4.png",
+    position: "Marketing Lead",
+  },
+  {
+    id: 5,
+    name: "Michael Oke",
+    image: "/team5.png",
+    position: "Customer Relations Manager",
+  },
+  {
+    id: 6,
+    name: "Chioma Nwankwo",
+    image: "/team6.png",
+    position: "Head Pastry Chef",
+  },
+  {
+    id: 7,
+    name: "Samuel Etim",
+    image: "/team7.png",
+    position: "Logistics Coordinator",
+  },
+  {
+    id: 8,
+    name: "Grace Oladimeji",
+    image: "/team8.png",
+    position: "Social Media Manager",
+  },
+];
