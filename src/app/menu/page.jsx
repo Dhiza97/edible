@@ -8,6 +8,8 @@ import { products } from "../assets/assets";
 import Card from "@/src/components/Card";
 import { IoChevronDownOutline, IoFilterOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
+import { FcNext } from "react-icons/fc";
+import { FcPrevious } from "react-icons/fc";
 
 const categories = [
   "All",
@@ -25,6 +27,8 @@ const Page = () => {
   const [sortOption, setSortOption] = useState("default");
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(8);
 
   useEffect(() => {
     let filtered = products;
@@ -64,7 +68,16 @@ const Page = () => {
     }
 
     setMenu(filtered);
+    setCurrentPage(1);
   }, [selectedCategory, sortOption, searchQuery]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(menu.length / productsPerPage);
+
+  // Get current page products
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = menu.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <>
@@ -178,10 +191,41 @@ const Page = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {menu.map((product) => (
+          {currentProducts.map((product) => (
             <Card key={product.id} product={product} />
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex gap-3">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+              className={`px-4 py-2 rounded-md ${
+                currentPage === 1 ? "bg-gray-300" : "bg-primaryColor text-white"
+              }`}
+            >
+              <FcPrevious />
+            </button>
+
+            <span className="px-4 py-2 bg-gray-200 rounded-md">
+              {currentPage} / {totalPages}
+            </span>
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+              className={`px-4 py-2 rounded-md ${
+                currentPage === totalPages
+                  ? "bg-gray-300"
+                  : "bg-primaryColor text-white"
+              }`}
+            >
+              <FcNext className="text-white" />
+            </button>
+          </div>
+        )}
       </div>
       <Footer />
     </>
