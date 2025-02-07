@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";  // Import this hook
+import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { assets } from "../app/assets/assets";
 import { CiUser } from "react-icons/ci";
@@ -49,7 +49,9 @@ const Navbar = () => {
       {/* Desktop Menu */}
       <ul
         className={`hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 ${
-          isScroll ? "" : "bg-white shadow-sm bg-opacity-50 dark:border dark:border-white/50 dark:bg-transparent"
+          isScroll
+            ? ""
+            : "bg-white shadow-sm bg-opacity-50 dark:border dark:border-white/50 dark:bg-transparent"
         }`}
       >
         {[
@@ -70,9 +72,12 @@ const Navbar = () => {
       </ul>
 
       <div className="flex justify-between gap-5 items-center">
-        <Link href={"/cart"}>
-          <IoBagOutline className="text-3xl text-primaryColor" />
-        </Link>
+        <div className="relative">
+          <Link href={"/cart"}>
+            <IoBagOutline className="text-3xl text-primaryColor" />
+          </Link>
+          <div className="absolute top-3 left-2 w-4 h-4 text-xs text-center text-white rounded-full bg-primaryColor shadow-md">0</div>
+        </div>
 
         {token ? (
           <CiUser className="text-3xl text-primaryColor hover:cursor-pointer" />
@@ -104,7 +109,14 @@ const Navbar = () => {
           { name: "About", path: "/about" },
           { name: "Contact", path: "/contact" },
         ].map((item) => (
-          <li key={item.path} className={pathname === item.path ? "text-primaryColor font-semibold underline" : ""}>
+          <li
+            key={item.path}
+            className={
+              pathname === item.path
+                ? "text-primaryColor font-semibold underline"
+                : ""
+            }
+          >
             <Link href={item.path} onClick={closeMenu}>
               {item.name}
             </Link>
