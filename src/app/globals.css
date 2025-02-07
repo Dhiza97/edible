@@ -16,12 +16,9 @@
   margin: auto;
 }
 
-.main-nav ul li:hover::after {
+.main-nav ul li:hover::after,
+.main-nav ul li.active::after {
   width: 100%;
-}
-
-a.active {
-  color: #eb5a3c;
 }
 
 .btn {

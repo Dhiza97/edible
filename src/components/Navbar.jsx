@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";  // Import this hook
 import React, { useEffect, useRef, useState } from "react";
 import { assets } from "../app/assets/assets";
 import { CiUser } from "react-icons/ci";
@@ -10,6 +11,7 @@ import { PiHamburger } from "react-icons/pi";
 import { IoBagOutline } from "react-icons/io5";
 
 const Navbar = () => {
+  const pathname = usePathname(); // Get the current path
   const [isScroll, setIsScroll] = useState(false);
   const [token, setToken] = useState("");
   const sideMenuRef = useRef();
@@ -44,27 +46,32 @@ const Navbar = () => {
         <Image src={assets.logo_light} alt="Logo" className="w-24" />
       </Link>
 
-      <ul className={`hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 ${isScroll ? "" : "bg-white shadow-sm bg-opacity-50 dark:border dark:border-white/50 dark:bg-transparent"}`}>
-        <li className="hover:text-primaryColor">
-          <a href={"/"}>Home</a>
-        </li>
-
-        <li className="hover:text-primaryColor">
-          <a href={"/menu"}>Menu</a>
-        </li>
-
-        <li className="hover:text-primaryColor">
-          <a href={"/about"}>About</a>
-        </li>
-
-        <li className="hover:text-primaryColor">
-          <a href={"/contact"}>Contact</a>
-        </li>
+      {/* Desktop Menu */}
+      <ul
+        className={`hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 ${
+          isScroll ? "" : "bg-white shadow-sm bg-opacity-50 dark:border dark:border-white/50 dark:bg-transparent"
+        }`}
+      >
+        {[
+          { name: "Home", path: "/" },
+          { name: "Menu", path: "/menu" },
+          { name: "About", path: "/about" },
+          { name: "Contact", path: "/contact" },
+        ].map((item) => (
+          <li
+            key={item.path}
+            className={`relative hover:text-primaryColor ${
+              pathname === item.path ? "text-primaryColor after:w-full" : ""
+            }`}
+          >
+            <Link href={item.path}>{item.name}</Link>
+          </li>
+        ))}
       </ul>
 
       <div className="flex justify-between gap-5 items-center">
-        <Link href={'/cart'}>
-        <IoBagOutline className="text-3xl text-primaryColor" />
+        <Link href={"/cart"}>
+          <IoBagOutline className="text-3xl text-primaryColor" />
         </Link>
 
         {token ? (
@@ -82,7 +89,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* mobile menu */}
+      {/* Mobile Menu */}
       <ul
         ref={sideMenuRef}
         className="flex md:hidden flex-col gap-4 py-20 px-10 fixed -right-64 top-0 bottom-0 w-64 z-50 h-screen bg-rose-50 transition duration-500 dark:bg-darkHover dark:text-white"
@@ -91,19 +98,18 @@ const Navbar = () => {
           <TfiClose />
         </div>
 
-        <li>
-          <a href="/" onClick={closeMenu}>Home</a>
-        </li>
-
-        <li>
-          <a href="/menu" onClick={closeMenu}>Menu</a>
-        </li>
-        <li>
-          <a href="/about" onClick={closeMenu}>About</a>
-        </li>
-        <li>
-          <a href="/contact" onClick={closeMenu}>Contact</a>
-        </li>
+        {[
+          { name: "Home", path: "/" },
+          { name: "Menu", path: "/menu" },
+          { name: "About", path: "/about" },
+          { name: "Contact", path: "/contact" },
+        ].map((item) => (
+          <li key={item.path} className={pathname === item.path ? "text-primaryColor font-semibold underline" : ""}>
+            <Link href={item.path} onClick={closeMenu}>
+              {item.name}
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );
