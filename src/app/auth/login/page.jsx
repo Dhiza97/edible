@@ -40,7 +40,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center flex-row-reverse h-screen">
-      {/* Image Section */}
+  
       <div className="hidden md:flex md:w-1/2 h-full justify-center items-center bg-gray-100 relative">
         {/* Video */}
         <video

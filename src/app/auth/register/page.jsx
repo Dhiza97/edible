@@ -44,7 +44,7 @@ export default function Register() {
 
   return (
     <div className="flex flex-col md:flex-row h-screen items-center justify-center">
-      {/* Image Section */}
+
       <div className="hidden md:flex md:w-1/2 h-full justify-center items-center bg-gray-100 relative">
         {/* Video */}
         <video
