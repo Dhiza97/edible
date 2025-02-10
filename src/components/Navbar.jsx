@@ -9,12 +9,16 @@ import { CiUser } from "react-icons/ci";
 import { TfiClose } from "react-icons/tfi";
 import { PiHamburger } from "react-icons/pi";
 import { IoBagOutline } from "react-icons/io5";
+import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
-  const pathname = usePathname(); // Get the current path
+  const { cart } = useCart();
+  const pathname = usePathname();
   const [isScroll, setIsScroll] = useState(false);
   const [token, setToken] = useState("");
   const sideMenuRef = useRef();
+
+  const cartCount = cart ? Object.values(cart).reduce((acc, curr) => acc + curr, 0) : 0;
 
   const openMenu = () => {
     sideMenuRef.current.style.transform = "translateX(-16rem)";
@@ -76,7 +80,11 @@ const Navbar = () => {
           <Link href={"/cart"}>
             <IoBagOutline className="text-3xl text-primaryColor" />
           </Link>
-          <div className="absolute top-3.5 left-2 w-4 h-4 text-xs text-center font-bold text-primaryColor">0</div>
+          {cartCount > 0 && (
+            <div className="absolute top-3.5 left-2 w-4 h-4 text-xs text-center font-bold text-primaryColor">
+              {cartCount}
+            </div>
+          )}
         </div>
 
         {token ? (

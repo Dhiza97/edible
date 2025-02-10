@@ -1,10 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
+import { useCart } from "../context/CartContext";
 
 const Card = ({ product }) => {
+  const { cart, addToCart, removeFromCart } = useCart();
+  const quantity = cart[product.id] || 0;
+
   return (
     <div className="my-10">
-      <a href="#" className="group relative block overflow-hidden">
+      <div className="group relative block overflow-hidden">
         <button className="absolute end-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75">
           <span className="sr-only">Wishlist</span>
           <svg
@@ -32,14 +38,36 @@ const Card = ({ product }) => {
         />
 
         <div className="relative border border-gray-100 bg-white p-6">
-          <h3 className="mt-4 text-lg font-medium text-gray-900">{product.name}</h3>
-          <p className="mt-1.5 text-sm text-gray-700">${product.price.toFixed(2)}</p>
+          <h3 className="mt-4 text-lg font-medium text-gray-900">
+            {product.name}
+          </h3>
+          <p className="mt-1.5 text-sm text-gray-700">
+            ${product.price.toFixed(2)}
+          </p>
 
-          <button className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105">
-            Add to Cart
-          </button>
+          {quantity > 0 ? (
+            <div className="flex justify-between items-center mt-4 bg-[#EDF4C2] rounded-sm p-4">
+              <button onClick={() => removeFromCart(product)} className="px-3">
+                -
+              </button>
+              <span>{quantity}</span>
+              <button onClick={() => addToCart(product)} className="px-3">
+                +
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                addToCart(product);
+              }}
+              className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105"
+            >
+              Add to Cart
+            </button>
+          )}
         </div>
-      </a>
+      </div>
     </div>
   );
 };
