@@ -9,6 +9,7 @@ import {
 } from "../../lib/firebase";
 import Image from "next/image";
 import { assets } from "../../assets/assets";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -29,15 +30,15 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
-  
+
       const data = await res.json();
       if (res.ok) {
-        setMessage(data.message);
+        toast.success(data.message);
         setTimeout(() => {
           router.push("/auth/login");
         }, 3000);
       } else {
-        setMessage(data.error);
+        toast.error(data.error);
       }
     } catch (error) {
       setMessage(error.message);
@@ -80,7 +81,6 @@ export default function Register() {
         <Image src={assets.logo_light} alt="logo" className="w-24" />
         <form onSubmit={handleSignUp} className="p-6 bg-white w-full max-w-md">
           <h2 className="text-xl font-semibold text-center mb-4">Sign Up</h2>
-          {message && <p className="text-red-500 text-center">{message}</p>}
           <input
             type="text"
             placeholder="Name"
@@ -116,9 +116,14 @@ export default function Register() {
             {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
-      </div>
 
-      <p>Already have an account? <a href="/auth/login">Login</a></p>
+        <p className="text-center mt-2 text-sm">
+          Already have an account?{" "}
+          <a href="/auth/login" className="text-primaryColor hover:underline">
+            Login
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

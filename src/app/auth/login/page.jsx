@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,86 +18,98 @@ export default function Login() {
     setMessage(null);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-
-      // Check if email is verified
-      if (!user.emailVerified) {
-        setMessage("Please verify your email before logging in.");
-        return;
-      }
-
-      // Update PostgreSQL verification status
-      await fetch("/api/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      // Send login request to backend
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Store token in localStorage
-        localStorage.setItem("token", data.token);
-
+        toast.success(data.message);
         router.push("/");
       } else {
-        setMessage(data.error);
+        toast.error(data.error);
       }
     } catch (error) {
-      setMessage(error.message);
+      setMessage("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center flex-col h-screen">
-      <form
-        onSubmit={handleLogin}
-        className="p-6 bg-white rounded-lg shadow-md w-96"
-      >
-        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
-        {message && <p className="text-red-500 text-center">{message}</p>}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
-          required
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
-          disabled={loading}
+    <div className="flex justify-center items-center flex-row-reverse h-screen">
+      {/* Image Section */}
+      <div className="hidden md:flex md:w-1/2 h-full justify-center items-center bg-gray-100 relative">
+        {/* Video */}
+        <video
+          className="w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
         >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+          <source src="/login_vid.mp4" type="video/mp4" />
+        </video>
 
-      <p className="text-center mt-2">
-        Don't have an account? <a href="/auth/register">Sign Up</a>
-      </p>
+        {/* Overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-black/50"></div>
+
+        {/* Text Over Video */}
+        <div className="absolute flex flex-col items-center justify-center w-full h-full text-white text-center px-6">
+          <h1 className="text-3xl md:text-5xl font-bold">
+            Welcome to <span className="text-primaryColor">Edible</span>!
+          </h1>
+          <p className="mt-2 text-lg md:text-xl">
+            Join us and explore amazing dishes.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center justify-center">
+        <form
+          onSubmit={handleLogin}
+          className="p-6 bg-white rounded-lg shadow-md w-96"
+        >
+          <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 border rounded mb-2"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 border rounded mb-4"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-primaryColor text-white p-2 rounded hover:scale-105 transition-all duration-700"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="text-center mt-2 text-sm">
+          Don't have an account?{" "}
+          <a
+            href="/auth/register"
+            className="text-primaryColor hover:underline"
+          >
+            Sign Up
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

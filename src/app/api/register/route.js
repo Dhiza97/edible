@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/src/app/lib/prisma";
 import jwt from "jsonwebtoken";
-import transporter from "@/src/utils/nodemailer";
 
 export async function POST(req) {
   try {
@@ -35,27 +34,16 @@ export async function POST(req) {
       expiresIn: "24h",
     });
 
-    // Create response object
-    // const response = NextResponse.json(
-    //   { message: "User registered successfully. Check your email to verify your account." },
-    //   { status: 201 }
-    // );
+    // Create a NextResponse object and set the cookie
+    const response = NextResponse.json(
+      { message: "User registered successfully" },
+      { status: 201 }
+    );
 
-    // Set token in HTTP-only cookie (expires in 1 day)
     response.headers.set(
       "Set-Cookie",
       `token=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400`
     );
-
-    // Send welcome email
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: "Welcome to Edible!",
-      text: `Welcome to Edible! Your account has been created with email: ${email}.`
-    };
-
-    await transporter.sendMail(mailOptions);
 
     return response;
   } catch (error) {

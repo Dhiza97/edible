@@ -82,7 +82,7 @@ const Navbar = () => {
         {token ? (
           <CiUser className="text-3xl text-primaryColor hover:cursor-pointer" />
         ) : (
-          <Link href={"/login"}>
+          <Link href={"/auth/login"}>
             <button className="bg-green-500 text-white px-4 py-2 rounded-full btn liquid font-light">
               Sign In
             </button>

@@ -1,6 +1,6 @@
 import { Poppins, Fruktur } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,10 +20,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body
-        className={`${poppins.className} ${fruktur.className} antialiased`}
-      >
-        <Toaster position="top-right" />
+      <body className={`${poppins.className} ${fruktur.className} antialiased`}>
+        <ToastContainer position="top-right" autoClose={3000} theme="dark" />
         {children}
       </body>
     </html>
