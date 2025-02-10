@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const images = ["burger.png", "spag.png", "taco.png"];
+const images = ["/burger.png", "/spag.png", "taco.png"];
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
