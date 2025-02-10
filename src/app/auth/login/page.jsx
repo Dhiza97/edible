@@ -2,8 +2,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuth } from "@/src/context/AuthContext";
 
 export default function Login() {
+  const { setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
@@ -27,6 +29,7 @@ export default function Login() {
 
       if (response.ok) {
         toast.success(data.message);
+        setUser(data.user);
         router.push("/");
       } else {
         toast.error(data.error);
@@ -39,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center flex-row-reverse h-screen">
+    <div className="flex justify-between items-center flex-row-reverse h-screen">
   
       <div className="hidden md:flex md:w-1/2 h-full justify-center items-center bg-gray-100 relative">
         {/* Video */}
@@ -67,10 +70,10 @@ export default function Login() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center mx-auto">
         <form
           onSubmit={handleLogin}
-          className="p-6 bg-white rounded-lg shadow-md w-96"
+          className="p-6 bg-white w-96"
         >
           <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
           <input

@@ -10,12 +10,13 @@ import { TfiClose } from "react-icons/tfi";
 import { PiHamburger } from "react-icons/pi";
 import { IoBagOutline } from "react-icons/io5";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { user } = useAuth();
   const { cart } = useCart();
   const pathname = usePathname();
   const [isScroll, setIsScroll] = useState(false);
-  const [token, setToken] = useState("");
   const sideMenuRef = useRef();
 
   const cartCount = cart ? Object.values(cart).reduce((acc, curr) => acc + curr, 0) : 0;
@@ -87,11 +88,11 @@ const Navbar = () => {
           )}
         </div>
 
-        {token ? (
+        {user ? (
           <CiUser className="text-3xl text-primaryColor hover:cursor-pointer" />
         ) : (
           <Link href={"/auth/login"}>
-            <button className="bg-green-500 text-white px-4 py-2 rounded-full btn liquid font-light">
+            <button className="px-4 py-2 rounded-full btn liquid font-light">
               Sign In
             </button>
           </Link>

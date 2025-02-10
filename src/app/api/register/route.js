@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/src/app/lib/prisma";
 import jwt from "jsonwebtoken";
+import transporter from "@/src/utils/nodemailer";
 
 export async function POST(req) {
   try {
@@ -44,6 +45,16 @@ export async function POST(req) {
       "Set-Cookie",
       `token=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400`
     );
+
+    // Send welcome email
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: 'Welcome to Edible!',
+      text: `Welcome to Edible website. Your account has been created with email id: ${email}`
+    }
+
+    await transporter.sendMail(mailOptions)
 
     return response;
   } catch (error) {
