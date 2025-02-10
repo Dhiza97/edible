@@ -76,7 +76,7 @@ const Navbar = () => {
           <Link href={"/cart"}>
             <IoBagOutline className="text-3xl text-primaryColor" />
           </Link>
-          <div className="absolute top-3 left-2 w-4 h-4 text-xs text-center text-white rounded-full bg-primaryColor shadow-md">0</div>
+          <div className="absolute top-3.5 left-2 w-4 h-4 text-xs text-center font-bold text-primaryColor">0</div>
         </div>
 
         {token ? (

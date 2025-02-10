@@ -14,7 +14,7 @@ const Category = () => {
         craving.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center mt-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center mt-10">
         {category.map((category) => {
           return (
             <Link href={`${category.link}`} key={category.id}>
@@ -26,7 +26,7 @@ const Category = () => {
                       {category.image}
                     </div>
                     <h3 className="text-lg text-[#DF9755] font-semibold mt-6">
-                      {category.title}
+                      {category.name}
                     </h3>
                   </div>
                   {/* Back */}

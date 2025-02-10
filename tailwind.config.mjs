@@ -22,9 +22,6 @@ export default {
         'black': '4px 4px #000',
         'white': '4px 4px #fff',
       },
-      gridTemplateColumns: {
-        'auto': 'repeat(auto-fit, minmax(200px, 1fr))'
-      }
     },
   },
   darkMode: 'selector',
