@@ -2,11 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  auth,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "../../lib/firebase";
 import Image from "next/image";
 import { assets } from "../../assets/assets";
 import { toast } from "react-toastify";
