@@ -1,4 +1,4 @@
-import { sendVerificationEmail } from "@/src/utils/nodemailer";
+import { sendEmail } from "@/src/utils/nodemailer";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -36,7 +36,7 @@ export async function POST(req) {
     });
 
     // Send OTP email
-    await sendVerificationEmail(email, otp);
+    await sendEmail(email, otp, "verification");
 
     return Response.json({ message: "OTP sent to email" }, { status: 200 });
   } catch (error) {
