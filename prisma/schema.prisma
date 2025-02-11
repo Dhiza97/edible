@@ -23,10 +23,10 @@ model User {
   cart                CartItem[]
   orders              Order[]
   verifyOtp           String     @default("")
-  verifiedOtpExpireAt DateTime?  @default(dbgenerated())
+  verifiedOtpExpireAt DateTime?  
   isVerified          Boolean    @default(false)
   resetOtp            String     @default("")
-  resetOtpExpireAt    DateTime?  @default(dbgenerated())
+  resetOtpExpireAt    DateTime?  
 }
 
 model CartItem {
