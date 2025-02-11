@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
   port: 587,
   auth: {
@@ -9,4 +9,13 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-export default transporter;
+export const sendVerificationEmail = async (email, otp) => {
+  const mailOptions = {
+    from: `"Edible" <${process.env.SENDER_EMAIL}>`,
+    to: email,
+    subject: "Verify Your Email",
+    text: `<h1>Your OTP for email verification is: ${otp}. It will expire in 10 minutes.</h1>`,
+  };
+
+  return transporter.sendMail(mailOptions);
+};
