@@ -18,7 +18,7 @@ export default function Login() {
     setMessage(null);
 
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -90,7 +90,7 @@ export default function Login() {
           />
 
           <p className="text-xs text-right pb-4 text-blue-600 hover:cursor-pointer hover:underline">
-            <a>
+            <a href="/api/forgot-password">
               Forgot password?
             </a>
           </p>
@@ -107,7 +107,7 @@ export default function Login() {
         <p className="text-center mt-2 text-sm">
           Don't have an account?{" "}
           <a
-            href="/auth/register"
+            href="/api/register"
             className="text-primaryColor hover:underline"
           >
             Sign Up

@@ -20,7 +20,7 @@ export default function Register() {
     setMessage(null);
 
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -30,7 +30,7 @@ export default function Register() {
       if (res.ok) {
         toast.success(data.message);
         setTimeout(() => {
-          router.push("/auth/login");
+          router.push("/api/verify-otp");
         }, 3000);
       } else {
         toast.error(data.error);
@@ -114,7 +114,7 @@ export default function Register() {
 
         <p className="text-center mt-2 text-sm">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-primaryColor hover:underline">
+          <a href="/api/login" className="text-primaryColor hover:underline">
             Login
           </a>
         </p>
