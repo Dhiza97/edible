@@ -43,7 +43,6 @@ export default function Login() {
 
   return (
     <div className="flex justify-between items-center flex-row-reverse h-screen">
-  
       <div className="hidden md:flex md:w-1/2 h-full justify-center items-center bg-gray-100 relative">
         {/* Video */}
         <video
@@ -71,10 +70,7 @@ export default function Login() {
       </div>
 
       <div className="flex flex-col items-center justify-center mx-auto">
-        <form
-          onSubmit={handleLogin}
-          className="p-6 bg-white w-96"
-        >
+        <form onSubmit={handleLogin} className="p-6 bg-white w-96">
           <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
           <input
             type="email"
@@ -92,6 +88,13 @@ export default function Login() {
             className="w-full p-2 border rounded mb-4"
             required
           />
+
+          <p className="text-xs text-right pb-4 text-blue-600 hover:cursor-pointer hover:underline">
+            <a>
+              Forgot password?
+            </a>
+          </p>
+
           <button
             type="submit"
             className="w-full bg-primaryColor text-white p-2 rounded hover:scale-105 transition-all duration-700"
