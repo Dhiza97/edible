@@ -17,7 +17,7 @@ export default function VerifyOtp() {
       return;
     }
 
-    const email = localStorage.getItem("resetEmail");
+    const email = localStorage.getItem("verifyEmail");
     if (!email) {
       toast.error("Email not found. Please request OTP again.");
       return;
@@ -30,16 +30,15 @@ export default function VerifyOtp() {
       const res = await fetch("/api/auth/verify-otp", {
         method: "POST",
         body: JSON.stringify({
-          email,
+          email: localStorage.getItem("verifyEmail"),
           otp: otp.toString(),
         }),
         headers: { "Content-Type": "application/json" },
       });
-      console.log("Stored email:", localStorage.getItem("resetEmail"));
 
       if (res.ok) {
         toast.success("OTP Verified Successfully!");
-        window.location.href = "/auth/login";
+        window.location.href = "/api/login";
       } else {
         toast.error("Invalid OTP, try again!");
       }

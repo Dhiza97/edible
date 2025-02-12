@@ -28,8 +28,10 @@ export default function Register() {
 
       const data = await res.json();
       if (res.ok) {
+        localStorage.setItem("verifyEmail", email);
         toast.success(data.message);
         setTimeout(() => {
+          console.log("Stored email:", localStorage.getItem("verifyEmail"));
           router.push("/api/verify-otp");
         }, 3000);
       } else {
