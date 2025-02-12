@@ -29,6 +29,7 @@ export default function Register() {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("verifyEmail", email);
+        toast.success("Registered Successfully!");
         toast.success(data.message);
         setTimeout(() => {
           console.log("Stored email:", localStorage.getItem("verifyEmail"));
@@ -64,10 +65,10 @@ export default function Register() {
 
         {/* Text Over Video */}
         <div className="absolute flex flex-col items-center justify-center w-full h-full text-white text-center px-6">
-          <h1 className="text-3xl md:text-5xl font-bold">
+          <h1 className="text-3xl md:text-5xl font-semibold">
             Welcome to <span className="text-primaryColor">Edible</span>!
           </h1>
-          <p className="mt-2 text-lg md:text-xl">
+          <p className="mt-2 text-lg md:text-base">
             Join us and explore amazing dishes.
           </p>
         </div>
@@ -107,7 +108,7 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full bg-primaryColor text-white p-2 rounded hover:scale-105 transition-all duration-700"
+            className="w-full bg-primaryColor text-white p-2 rounded hover:scale-105 transition-all duration-700 disabled:bg-gray-400"
             disabled={loading}
           >
             {loading ? "Signing up..." : "Sign Up"}

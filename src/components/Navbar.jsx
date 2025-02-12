@@ -96,7 +96,7 @@ const Navbar = () => {
             <IoBagOutline className="text-3xl text-primaryColor" />
           </Link>
           {cartCount > 0 && (
-            <div className="absolute top-3.5 left-2 w-4 h-4 text-xs text-center font-bold text-primaryColor">
+            <div className="absolute top-3 left-2 w-4 h-4 text-sm text-center font-bold text-primaryColor">
               {cartCount}
             </div>
           )}
@@ -132,7 +132,7 @@ const Navbar = () => {
             )}
           </div>
         ) : (
-          <Link href={"/api/login"}>
+          <Link href={"/login"}>
             <button className="px-4 py-2 rounded-full btn liquid font-light">
               Sign In
             </button>

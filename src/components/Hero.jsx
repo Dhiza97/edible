@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const images = ["/burger.png", "/spag.png", "taco.png"];
 
@@ -29,7 +30,7 @@ const Hero = () => {
         Your browser does not support the video tag.
       </video>
 
-      <div className="flex flex-col sm:flex-row lg:flex-row items-center justify-center">
+      <div className="flex flex-col sm:flex-row-reverse lg:flex-row-reverse items-center justify-between">
         {/* Images on the Right Side with Fade Animation */}
         <div className="w-full lg:w-1/2 transform">
           <AnimatePresence mode="wait">
@@ -74,20 +75,26 @@ const Hero = () => {
             a dining experience crafted with passion.
           </motion.p>
 
-          <motion.button
-            className="btn-order px-7 py-4 mt-6 text-primaryColor rounded-full neon-pulse hover:text-white"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <a href="/menu">
-            ORDER NOW
-            </a>
-          </motion.button>
+          <Link href="/menu" passHref>
+            <motion.button
+              className="btn-order px-7 py-4 mt-6 text-primaryColor rounded-full neon-pulse hover:text-white"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              ORDER NOW
+            </motion.button>
+          </Link>
         </motion.div>
       </div>
 
       <div className="absolute bottom-0 left-0 w-full">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill0pacity="1" d="M0,224L80,208C160,192,320,160,480,170.7C640,181,800,235,960,245.3C1120,256,1280,224,1360,208L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <path
+            fill="#fff"
+            fill0pacity="1"
+            d="M0,224L80,208C160,192,320,160,480,170.7C640,181,800,235,960,245.3C1120,256,1280,224,1360,208L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
+          ></path>
+        </svg>
       </div>
     </div>
   );

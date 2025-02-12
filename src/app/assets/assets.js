@@ -41,14 +41,6 @@ export const category = [
       "Get your favorite pasta cooked to perfection with our fresh ingredients.",
     link: "/main-dishes",
   },
-  {
-    id: 5,
-    image: <FaBowlFood />,
-    name: "Main Dish",
-    description:
-      "Get your favorite pasta cooked to perfection with our fresh ingredients.",
-    link: "/main-dishes",
-  },
 ];
 
 export const products = [

@@ -91,12 +91,12 @@ export default function Login() {
           />
 
           <p className="text-xs text-right pb-4 text-blue-600 hover:cursor-pointer hover:underline">
-            <a href="/api/forgot-password">Forgot password?</a>
+            <a href="/forgot-password">Forgot password?</a>
           </p>
 
           <button
             type="submit"
-            className="w-full bg-primaryColor text-white p-2 rounded hover:scale-105 transition-all duration-700"
+            className="w-full bg-primaryColor text-white p-2 rounded hover:scale-105 transition-all duration-700 disabled:bg-gray-400"
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
