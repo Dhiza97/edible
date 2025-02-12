@@ -1,11 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const requestOtp = async () => {
     if (!email) {
@@ -15,7 +17,7 @@ export default function ForgotPassword() {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/reset-password", {
+      const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         body: JSON.stringify({ email }),
         headers: { "Content-Type": "application/json" },
@@ -24,6 +26,8 @@ export default function ForgotPassword() {
       const data = await res.json();
       if (res.ok) {
         toast.success("OTP sent to your email!");
+        localStorage.setItem("resetEmail", email);
+        router.push("/api/reset-password");
       } else {
         toast.error(data.error || "Something went wrong.");
       }
@@ -67,7 +71,7 @@ export default function ForgotPassword() {
 
         <p className="text-center text-sm text-gray-600 mt-4">
           Remembered your password?{" "}
-          <a href="/auth/login" className="text-primaryColor hover:underline">
+          <a href="/api/login" className="text-primaryColor hover:underline">
             Login
           </a>
         </p>

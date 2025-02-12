@@ -1,4 +1,4 @@
-import { sendEmail } from "@/src/utils/nodemailer";
+import { sendOTPEmail } from "@/src/utils/nodemailer";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -29,7 +29,7 @@ export async function POST(req) {
     });
 
     // Send OTP email
-    await sendEmail(email, otp, "passwordReset");
+    await sendOTPEmail(email, otp, "passwordReset");
 
     return Response.json({ message: "Reset OTP sent to email" }, { status: 200 });
   } catch (error) {
