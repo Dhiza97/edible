@@ -93,7 +93,7 @@ const Navbar = () => {
       <div className="flex justify-between gap-5 items-center">
         <div className="relative">
           <Link href={"/cart"}>
-            <IoBagOutline className="text-3xl text-primaryColor" />
+            <IoBagOutline className="text-3xl text-primaryColor " />
           </Link>
           {cartCount > 0 && (
             <div className="absolute top-3 left-2 w-4 h-4 text-sm text-center font-bold text-primaryColor">
