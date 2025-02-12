@@ -76,7 +76,7 @@ export default function ResetPassword() {
         <button
           onClick={handleReset}
           disabled={loading}
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 mt-4 rounded-md transition-all duration-300 disabled:bg-gray-400"
+          className="w-full bg-primaryColor hover:bg-orange-700 text-white font-semibold py-2 mt-4 rounded-md transition-all duration-300 disabled:bg-gray-400"
         >
           {loading ? "Resetting..." : "Reset Password"}
         </button>

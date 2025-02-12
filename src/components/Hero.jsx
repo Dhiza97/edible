@@ -79,7 +79,9 @@ const Hero = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
+            <a href="/menu">
             ORDER NOW
+            </a>
           </motion.button>
         </motion.div>
       </div>
