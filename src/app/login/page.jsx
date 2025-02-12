@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useAuth } from "@/src/context/AuthContext";
+import { assets } from "../assets/assets";
+import Image from "next/image";
 
 export default function Login() {
   const { setUser } = useAuth();
@@ -71,6 +73,7 @@ export default function Login() {
       </div>
 
       <div className="flex flex-col items-center justify-center mx-auto">
+        <Image src={assets.logo_dark} alt="logo" className="w-24" />
         <form onSubmit={handleLogin} className="p-6 bg-white w-96">
           <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
           <input
