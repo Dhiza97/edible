@@ -2,12 +2,12 @@ import { PrismaClient } from "@prisma/client";
 import { sendVerificationEmail } from "@/src/utils/nodemailer";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import rateLimit from "@/src/app/lib/rateLimit"; // Import correctly
+import rateLimit from "@/src/app/lib/rateLimit";
 
 const prisma = new PrismaClient();
 
 export async function POST(req) {
-  const res = NextResponse.next(); // Create a response object
+  const res = NextResponse.next();
 
   try {
     // Apply rate limiter correctly
