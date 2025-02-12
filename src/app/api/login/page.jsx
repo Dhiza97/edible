@@ -52,7 +52,7 @@ export default function Login() {
           muted
           playsInline
         >
-          <source src="/login_vid.mp4" type="video/mp4" />
+          <source src="/login_bg.mp4" type="video/mp4" />
         </video>
 
         {/* Overlay */}
@@ -60,11 +60,12 @@ export default function Login() {
 
         {/* Text Over Video */}
         <div className="absolute flex flex-col items-center justify-center w-full h-full text-white text-center px-6">
-          <h1 className="text-3xl md:text-5xl font-bold">
-            Welcome to <span className="text-primaryColor">Edible</span>!
+          <h1 className="text-3xl md:text-5xl font-semibold">
+            Welcome Back to <span className="text-primaryColor">Edible</span>!
           </h1>
-          <p className="mt-2 text-lg md:text-xl">
-            Join us and explore amazing dishes.
+          <p className="mt-2 text-lg md:text-base">
+            Sign in to explore delicious meals and manage your orders
+            effortlessly.
           </p>
         </div>
       </div>
@@ -90,9 +91,7 @@ export default function Login() {
           />
 
           <p className="text-xs text-right pb-4 text-blue-600 hover:cursor-pointer hover:underline">
-            <a href="/api/forgot-password">
-              Forgot password?
-            </a>
+            <a href="/api/forgot-password">Forgot password?</a>
           </p>
 
           <button
@@ -106,10 +105,7 @@ export default function Login() {
 
         <p className="text-center mt-2 text-sm">
           Don't have an account?{" "}
-          <a
-            href="/api/register"
-            className="text-primaryColor hover:underline"
-          >
+          <a href="/api/register" className="text-primaryColor hover:underline">
             Sign Up
           </a>
         </p>

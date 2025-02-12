@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 export async function POST(req) {
   try {
     const { email, otp } = await req.json();
+    console.log("Received email in API:", email);
 
     // Find user
     const user = await prisma.user.findUnique({ where: { email } });

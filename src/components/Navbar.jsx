@@ -13,13 +13,17 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { cart } = useCart();
   const pathname = usePathname();
   const [isScroll, setIsScroll] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const sideMenuRef = useRef();
+  const dropdownRef = useRef();
 
-  const cartCount = cart ? Object.values(cart).reduce((acc, curr) => acc + curr, 0) : 0;
+  const cartCount = cart
+    ? Object.values(cart).reduce((acc, curr) => acc + curr, 0)
+    : 0;
 
   const openMenu = () => {
     sideMenuRef.current.style.transform = "translateX(-16rem)";
@@ -37,6 +41,16 @@ const Navbar = () => {
         setIsScroll(false);
       }
     });
+
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -63,7 +77,7 @@ const Navbar = () => {
           { name: "Home", path: "/" },
           { name: "Menu", path: "/menu" },
           { name: "About", path: "/about" },
-          { name: "Contact", path: "/contact" },
+          { name: "Contact Us", path: "/contact" },
         ].map((item) => (
           <li
             key={item.path}
@@ -89,9 +103,36 @@ const Navbar = () => {
         </div>
 
         {user ? (
-          <CiUser className="text-3xl text-primaryColor hover:cursor-pointer" />
+          <div className="relative" ref={dropdownRef}>
+            <CiUser
+              className="text-3xl text-primaryColor hover:cursor-pointer"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            />
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-lg dark:bg-darkTheme">
+                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                  <li>
+                    <Link
+                      href="/wishlist"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Wishlist
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={logout}
+                      className="w-full text-left block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         ) : (
-          <Link href={"/auth/login"}>
+          <Link href={"/api/login"}>
             <button className="px-4 py-2 rounded-full btn liquid font-light">
               Sign In
             </button>
@@ -116,13 +157,13 @@ const Navbar = () => {
           { name: "Home", path: "/" },
           { name: "Menu", path: "/menu" },
           { name: "About", path: "/about" },
-          { name: "Contact", path: "/contact" },
+          { name: "Contact Us", path: "/contact" },
         ].map((item) => (
           <li
             key={item.path}
             className={
               pathname === item.path
-                ? "text-primaryColor font-semibold underline"
+                ? "text-primaryColor"
                 : ""
             }
           >

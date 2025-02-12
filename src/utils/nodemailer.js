@@ -26,7 +26,7 @@ export const sendOTPEmail = async (email, otp, type) => {
     to: email,
     subject: subject,
     html: `
-      <div style="font-family: Arial, sans-serif; padding: 20px; border-radius: 10px; background: #f9f9f9;">
+      <div style="font-family: Arial, sans-serif; padding: 20px; border-radius: 10px; background: #f9f9f9; text-align: center;">
         <h2 style="color: #333; text-align: center;">${subject}</h2>
         <p style="font-size: 16px; color: #555; text-align: center;">
           ${message} This code will expire in <strong>10 minutes</strong>.
