@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { assets } from "../../assets/assets";
+import { assets } from "../assets/assets";
 import { toast } from "react-toastify";
 
 export default function Register() {
@@ -32,7 +32,7 @@ export default function Register() {
         toast.success(data.message);
         setTimeout(() => {
           console.log("Stored email:", localStorage.getItem("verifyEmail"));
-          router.push("/api/verify-otp");
+          router.push("/verify-otp");
         }, 3000);
       } else {
         toast.error(data.error);
@@ -116,7 +116,7 @@ export default function Register() {
 
         <p className="text-center mt-2 text-sm">
           Already have an account?{" "}
-          <a href="/api/login" className="text-primaryColor hover:underline">
+          <a href="/login" className="text-primaryColor hover:underline">
             Login
           </a>
         </p>

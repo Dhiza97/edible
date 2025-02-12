@@ -31,7 +31,7 @@ export default function ResetPassword() {
       if (res.ok) {
         toast.success("Password Reset Successful!");
         localStorage.removeItem("resetEmail");
-        window.location.href = "/api/login";
+        window.location.href = "/login";
       } else {
         toast.error(data.error || "Error resetting password");
       }

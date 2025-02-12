@@ -38,7 +38,7 @@ export default function VerifyOtp() {
 
       if (res.ok) {
         toast.success("OTP Verified Successfully!");
-        window.location.href = "/api/login";
+        window.location.href = "/login";
       } else {
         toast.error("Invalid OTP, try again!");
       }

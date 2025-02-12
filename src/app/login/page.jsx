@@ -105,7 +105,7 @@ export default function Login() {
 
         <p className="text-center mt-2 text-sm">
           Don't have an account?{" "}
-          <a href="/api/register" className="text-primaryColor hover:underline">
+          <a href="/register" className="text-primaryColor hover:underline">
             Sign Up
           </a>
         </p>

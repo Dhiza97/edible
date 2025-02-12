@@ -27,7 +27,7 @@ export default function ForgotPassword() {
       if (res.ok) {
         toast.success("OTP sent to your email!");
         localStorage.setItem("resetEmail", email);
-        router.push("/api/reset-password");
+        router.push("/reset-password");
       } else {
         toast.error(data.error || "Something went wrong.");
       }
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
 
         <p className="text-center text-sm text-gray-600 mt-4">
           Remembered your password?{" "}
-          <a href="/api/login" className="text-primaryColor hover:underline">
+          <a href="/login" className="text-primaryColor hover:underline">
             Login
           </a>
         </p>
