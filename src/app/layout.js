@@ -1,8 +1,7 @@
 import { Poppins, Fruktur } from "next/font/google";
 import "./globals.css";
 import { ToastContainer, toast } from "react-toastify";
-import { CartProvider } from "../context/CartContext";
-import { AuthProvider } from "../context/AuthContext";
+import AppContextProvider from "../context/AppContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,16 +22,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${poppins.className} ${fruktur.className} antialiased`}>
-        <AuthProvider>
-          <CartProvider>
+        <AppContextProvider>
             <ToastContainer
               position="top-right"
               autoClose={3000}
               theme="dark"
             />
             {children}
-          </CartProvider>
-        </AuthProvider>
+        </AppContextProvider>
       </body>
     </html>
   );

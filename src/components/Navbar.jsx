@@ -3,27 +3,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { assets } from "../app/assets/assets";
 import { CiUser } from "react-icons/ci";
 import { TfiClose } from "react-icons/tfi";
 import { PiHamburger } from "react-icons/pi";
 import { IoBagOutline } from "react-icons/io5";
-import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
+import { AppContext } from "../context/AppContext";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
-  const { cart } = useCart();
+  const { user, logout } = useContext(AppContext);
   const pathname = usePathname();
   const [isScroll, setIsScroll] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const sideMenuRef = useRef();
   const dropdownRef = useRef();
-
-  const cartCount = cart
-    ? Object.values(cart).reduce((acc, curr) => acc + curr, 0)
-    : 0;
 
   const openMenu = () => {
     sideMenuRef.current.style.transform = "translateX(-16rem)";
@@ -95,19 +90,19 @@ const Navbar = () => {
           <Link href={"/cart"}>
             <IoBagOutline className="text-3xl text-primaryColor " />
           </Link>
-          {cartCount > 0 && (
-            <div className="absolute top-3 left-2 w-4 h-4 text-sm text-center font-bold text-primaryColor">
-              {cartCount}
-            </div>
-          )}
+          <div className="absolute top-3 left-2 w-4 h-4 text-sm text-center font-bold text-primaryColor"></div>
         </div>
 
         {user ? (
           <div className="relative" ref={dropdownRef}>
-            <CiUser
-              className="text-3xl text-primaryColor hover:cursor-pointer"
+            <div
+              className="flex items-center hover:cursor-pointer"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            />
+            >
+              <CiUser className="text-3xl text-primaryColor hover:cursor-pointer" />
+              <MdKeyboardArrowDown className="text-primaryColor" />
+            </div>
+
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-lg dark:bg-darkTheme">
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
@@ -161,11 +156,7 @@ const Navbar = () => {
         ].map((item) => (
           <li
             key={item.path}
-            className={
-              pathname === item.path
-                ? "text-primaryColor"
-                : ""
-            }
+            className={pathname === item.path ? "text-primaryColor" : ""}
           >
             <Link href={item.path} onClick={closeMenu}>
               {item.name}

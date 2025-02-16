@@ -1,13 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useAuth } from "@/src/context/AuthContext";
 import { assets } from "../assets/assets";
 import Image from "next/image";
+import { AppContext } from "@/src/context/AppContext";
 
 export default function Login() {
-  const { setUser } = useAuth();
+  const { setUser } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);

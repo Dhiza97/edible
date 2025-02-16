@@ -1,10 +1,11 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+
+import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const AuthContext = createContext();
+export const AppContext = createContext();
 
-export function AuthProvider({ children }) {
+const AppContextProvider = (props) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -24,10 +25,14 @@ export function AuthProvider({ children }) {
   // Logout function
   const logout = async () => {
     try {
-      const res = await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
       if (res.ok) {
         toast.success("Logged out successfully!");
         setUser(null);
+        console.log("User after logout:", user);
       }
     } catch (error) {
       console.error("Error logging out:", error);
@@ -35,12 +40,10 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AppContext.Provider value={{ user, setUser, logout }}>
+      {props.children}
+    </AppContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export default AppContextProvider;
