@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 import { IoHeartOutline } from "react-icons/io5";
+import { AppContext } from "../context/AppContext";
 
 const Card = ({ product }) => {
+  const { addToCart } = useContext(AppContext);
 
   return (
     <div className="my-10">
@@ -28,11 +30,12 @@ const Card = ({ product }) => {
           <p className="mt-1.5 text-sm text-gray-700">
             ${product.price.toFixed(2)}
           </p>
-            <button
-              className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105"
-            >
-              Add to Cart
-            </button>
+          <button
+            onClick={() => addToCart(product)}
+            className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105"
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

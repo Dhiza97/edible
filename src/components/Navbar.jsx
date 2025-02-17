@@ -13,7 +13,7 @@ import { AppContext } from "../context/AppContext";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
 const Navbar = () => {
-  const { user, logout } = useContext(AppContext);
+  const { user, logout, cart } = useContext(AppContext);
   const pathname = usePathname();
   const [isScroll, setIsScroll] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -90,7 +90,11 @@ const Navbar = () => {
           <Link href={"/cart"}>
             <IoBagOutline className="text-3xl text-primaryColor " />
           </Link>
-          <div className="absolute top-3 left-2 w-4 h-4 text-sm text-center font-bold text-primaryColor"></div>
+          {cart.length > 0 && (
+            <div className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center text-xs text-white bg-red-500 rounded-full">
+              {cart.length}
+            </div>
+          )}
         </div>
 
         {user ? (
