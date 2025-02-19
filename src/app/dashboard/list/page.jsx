@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import { FaSquareCheck } from "react-icons/fa6";
+import { MdCancel } from "react-icons/md";
 
 const List = () => {
   const [products, setProducts] = useState([]);
@@ -57,19 +59,22 @@ const List = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-4">Product List</h2>
+
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-gray-100">
-              <th className="border p-2">Image</th>
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Category</th>
-              <th className="border p-2">Price</th>
-              <th className="border p-2">Stock</th>
-              <th className="border p-2">Featured</th>
-              <th className="border p-2">Actions</th>
+              <th className="border p-2 font-semibold">Image</th>
+              <th className="border p-2 font-semibold">Name</th>
+              <th className="border p-2 font-semibold">Category</th>
+              <th className="border p-2 font-semibold">Price</th>
+              <th className="border p-2 font-semibold">Discount Price</th>
+              <th className="border p-2 font-semibold">Stock</th>
+              <th className="border p-2 font-semibold">Featured</th>
+              <th className="border p-2 font-semibold">Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {products.length > 0 ? (
               products.map((product) => (
@@ -90,14 +95,15 @@ const List = () => {
                   <td className="border p-2">{product.name}</td>
                   <td className="border p-2">{product.category}</td>
                   <td className="border p-2">${product.price}</td>
+                  <td className="border p-2">{`$${product.discountPrice ? product.discountPrice : 0}`}</td>
                   <td className="border p-2">{product.stock}</td>
                   <td className="border p-2">
-                    {product.isFeatured ? "✅" : "❌"}
+                    {product.isFeatured ? <FaSquareCheck className="text-xl mx-auto" /> : <MdCancel className="text-xl mx-auto" />}
                   </td>
                   <td className="border p-2 flex justify-center gap-2">
                     <button
                       onClick={() => handleEdit(product)}
-                      className="bg-blue-500 text-white px-3 py-1 rounded-md"
+                      className="bg-black text-white px-3 py-1 rounded-md"
                     >
                       Edit
                     </button>
@@ -136,6 +142,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
   const [formData, setFormData] = useState({
     name: product.name,
     price: product.price,
+    discountPrice: product.discountPrice,
     stock: product.stock,
     isFeatured: product.isFeatured,
     category: product.category,
@@ -171,7 +178,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="border p-2 rounded-md"
+            className="border p-2 rounded-md outline-primaryColor"
             placeholder="Product Name"
           />
           <input
@@ -179,22 +186,30 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             name="price"
             value={formData.price}
             onChange={handleChange}
-            className="border p-2 rounded-md"
+            className="border p-2 rounded-md outline-primaryColor"
             placeholder="Price"
+          />
+          <input
+            type="number"
+            name="discountPrice"
+            value={formData.discountPrice}
+            onChange={handleChange}
+            className="border p-2 rounded-md outline-primaryColor"
+            placeholder="Discount Price (Optional)"
           />
           <input
             type="number"
             name="stock"
             value={formData.stock}
             onChange={handleChange}
-            className="border p-2 rounded-md"
+            className="border w-20 p-2 rounded-md outline-primaryColor"
             placeholder="Stock"
           />
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="border p-2 rounded-md"
+            className="border p-2 rounded-md outline-primaryColor"
           >
             <option value="Combos">Combos</option>
             <option value="Main Dishes">Main Dishes</option>
@@ -209,6 +224,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
               name="isFeatured"
               checked={formData.isFeatured}
               onChange={handleChange}
+              className=""
             />
             Featured
           </label>
@@ -220,7 +236,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             >
               Cancel
             </button>
-            <button type="submit" className="bg-green-500 text-white px-3 py-1 rounded-md">
+            <button type="submit" className="bg-primaryColor text-white px-3 py-1 rounded-md">
               Update
             </button>
           </div>
