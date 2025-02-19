@@ -28,14 +28,17 @@ const AddItem = ({ token }) => {
       if (discountPrice) formData.append("discountPrice", discountPrice);
       if (image) formData.append("image", image);
 
-      const response = await axios.post(
-        `${backendUrl}/api/products/add`,
-        formData,
-        { headers: { token } }
-      );
+      console.log("Submitting form...")
+
+      const response = await axios.post("/api/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          token,
+        },
+      });
 
       if (response.data.success) {
-        toast.success(response.data.message);
+        toast.success("Product added successfully!");
         setName("");
         setImage(false);
         setPrice("");
@@ -43,11 +46,10 @@ const AddItem = ({ token }) => {
         setStock(0);
         setIsFeatured(false);
       } else {
-        toast.error(response.data.message);
+        toast.error("Failed to add product.");
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || "Something went wrong.");
     }
   };
 
@@ -123,14 +125,25 @@ const AddItem = ({ token }) => {
 
         <div className="w-full">
           <p className="mb-2">Category</p>
-          <input
+          <select
             onChange={(e) => setCategory(e.target.value)}
             value={category}
             className="w-full px-3 py-2 border border-black outline-primaryColor focus:border-none"
-            type="text"
-            placeholder="Enter category"
             required
-          />
+          >
+            {[
+              "Combos",
+              "Main Dishes",
+              "Side Dishes",
+              "Appetizer",
+              "Desserts",
+              "Drinks",
+            ].map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="w-full">
