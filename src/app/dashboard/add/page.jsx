@@ -131,18 +131,12 @@ const AddItem = ({ token }) => {
             className="w-full px-3 py-2 border border-black outline-primaryColor focus:border-none"
             required
           >
-            {[
-              "Combos",
-              "Main Dishes",
-              "Side Dishes",
-              "Appetizer",
-              "Desserts",
-              "Drinks",
-            ].map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
+            <option value="combos">Combos</option>
+            <option value="main-dishes">Main Dishes</option>
+            <option value="side-dishes">Side Dishes</option>
+            <option value="appetizers">Appetizers</option>
+            <option value="desserts">Desserts</option>
+            <option value="drinks">Drinks</option>
           </select>
         </div>
 

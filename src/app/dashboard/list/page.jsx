@@ -212,11 +212,11 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             className="border p-2 rounded-md outline-primaryColor"
           >
             <option value="Combos">Combos</option>
-            <option value="Main Dishes">Main Dishes</option>
-            <option value="Side Dishes">Side Dishes</option>
-            <option value="Appetizer">Appetizer</option>
-            <option value="Desserts">Desserts</option>
-            <option value="Drinks">Drinks</option>
+            <option value="main-dishes">Main Dishes</option>
+            <option value="side-dishes">Side Dishes</option>
+            <option value="appetizers">Appetizers</option>
+            <option value="desserts">Desserts</option>
+            <option value="drinks">Drinks</option>
           </select>
           <label className="flex items-center gap-2">
             <input
