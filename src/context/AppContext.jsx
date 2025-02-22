@@ -8,6 +8,21 @@ export const AppContext = createContext();
 const AppContextProvider = (props) => {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products");
+        const data = await res.json();
+        if (res.ok) setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+  
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -115,6 +130,7 @@ const AppContextProvider = (props) => {
         fetchCart,
         addToCart,
         updateCartItem,
+        products
       }}
     >
       {props.children}

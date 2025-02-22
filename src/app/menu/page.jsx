@@ -3,26 +3,27 @@
 import Footer from "@/src/components/Footer";
 import Navbar from "@/src/components/Navbar";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { products } from "../assets/assets";
+import React, { useState, useEffect, useContext } from "react";
 import Card from "@/src/components/Card";
 import { IoChevronDownOutline, IoFilterOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
+import { AppContext } from "@/src/context/AppContext";
 
 const categories = [
   "All",
   "Combos",
   "Main Dishes",
   "Side Dishes",
-  "Appetizer",
+  "Appetizers",
   "Desserts",
   "Drinks",
 ];
 
 const Page = () => {
-  const [menu, setMenu] = useState(products);
+  const { products } = useContext(AppContext);
+  const [menu, setMenu] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("default");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -31,11 +32,15 @@ const Page = () => {
   const [productsPerPage] = useState(8);
 
   useEffect(() => {
-    let filtered = products;
+    setMenu(products);
+  }, [products]);
+
+  useEffect(() => {
+    let filtered = products || [];
 
     // Filter by category
     if (selectedCategory !== "All") {
-      filtered = products.filter(
+      filtered = products?.filter(
         (product) =>
           product.category.replace(/\s+/g, "-").toLowerCase() ===
           selectedCategory.replace(/\s+/g, "-").toLowerCase()
@@ -69,15 +74,15 @@ const Page = () => {
 
     setMenu(filtered);
     setCurrentPage(1);
-  }, [selectedCategory, sortOption, searchQuery]);
+  }, [selectedCategory, sortOption, searchQuery, products]);
 
   // Calculate total pages
-  const totalPages = Math.ceil(menu.length / productsPerPage);
+  const totalPages = Math.ceil(menu?.length / productsPerPage);
 
   // Get current page products
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = menu.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = menu?.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <>
@@ -191,9 +196,10 @@ const Page = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {currentProducts.map((product) => (
-            <Card key={product.id} product={product} />
-          ))}
+          {currentProducts?.map((product, index) => {
+            console.log("Rendering Product:", product);
+            return <Card key={product.id || index} product={product} />;
+          })}
         </div>
 
         {/* Pagination Controls */}
