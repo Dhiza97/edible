@@ -57,7 +57,7 @@ const Navbar = () => {
       }`}
     >
       <Link href={"/"}>
-        <Image src={assets.logo_light} alt="Logo" className="w-24" />
+        <Image src={assets.logo_dark} alt="Logo" className="w-24" />
       </Link>
 
       {/* Desktop Menu */}
@@ -65,7 +65,7 @@ const Navbar = () => {
         className={`hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 ${
           isScroll
             ? ""
-            : "bg-white shadow-sm bg-opacity-50 dark:border dark:border-white/50 dark:bg-transparent"
+            : "bg-[#E2DF4C] text-white shadow-sm bg-opacity-50 dark:border dark:border-white/50 dark:bg-transparent"
         }`}
       >
         {[
