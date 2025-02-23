@@ -24,26 +24,26 @@ const Sidebar = () => {
     <div className="w-[18%] min-h-screen border-r-2">
       <div className="flex flex-col gap-4 pt-6 pl-[20%] text-[15px ]">
         <Link
-          className={getLinkClass("/dashboard/add")}
-          href="/dashboard/add"
+          className={getLinkClass("/admin/dashboard/add")}
+          href="/admin/dashboard/add"
         >
-          <IoIosAddCircle className={`w-5 h-5 ${getIconClass("/dashboard/add")}`} />
+          <IoIosAddCircle className={`w-5 h-5 ${getIconClass("/admin/dashboard/add")}`} />
           <p className="hidden  md:block">Add Items</p>
         </Link>
 
         <Link
-          className={getLinkClass("/dashboard/list")}
-          href="/dashboard/list"
+          className={getLinkClass("/admin/dashboard/list")}
+          href="/admin/dashboard/list"
         >
-          <FaCalendarCheck className={`w-5 h-5 ${getIconClass("/dashboard/list")}`} />
+          <FaCalendarCheck className={`w-5 h-5 ${getIconClass("/admin/dashboard/list")}`} />
           <p className="hidden  md:block">List Items</p>
         </Link>
 
         <Link
-          className={getLinkClass("/dashboard/orders")}
-          href="/dashboard/orders"
+          className={getLinkClass("/admin/dashboard/orders")}
+          href="/admin/dashboard/orders"
         >
-          <FaClipboardList className={`w-5 h-5 ${getIconClass("/dashboard/orders")}`} />
+          <FaClipboardList className={`w-5 h-5 ${getIconClass("/admin/dashboard/orders")}`} />
           <p className="hidden  md:block">Orders</p>
         </Link>
       </div>
