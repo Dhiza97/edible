@@ -4,6 +4,7 @@ import Link from "next/link";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaClipboardList, FaCalendarCheck } from "react-icons/fa";
 import { usePathname } from "next/navigation";
+import { MdDashboard } from "react-icons/md";
 
 const Sidebar = () => {
   const pathname = usePathname()
@@ -23,6 +24,14 @@ const Sidebar = () => {
   return (
     <div className="w-[18%] min-h-screen border-r-2 fixed top-[60px]">
       <div className="flex flex-col gap-4 pt-6 pl-[20%] text-[15px ]">
+        <Link
+          className={getLinkClass("/admin/dashboard")}
+          href="/admin/dashboard"
+        >
+          <MdDashboard className={`w-5 h-5 ${getIconClass("/admin/dashboard")}`} />
+          <p className="hidden  md:block">Dashboard</p>
+        </Link>
+
         <Link
           className={getLinkClass("/admin/dashboard/add")}
           href="/admin/dashboard/add"
