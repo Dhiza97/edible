@@ -35,16 +35,27 @@ export async function PUT(req) {
 
   const cartItem = await prisma.cartItem.findFirst({
     where: { userId, productId },
-  });  
+  });
 
   if (!cartItem) return Response.json({ error: "Item not found" }, { status: 404 });
 
-  const updatedQuantity = action === "increase" ? cartItem.quantity + 1 : Math.max(cartItem.quantity - 1, 1);
+  let updatedQuantity = cartItem.quantity;
+  if (action === "increase") {
+    updatedQuantity += 1;
+  } else if (action === "decrease") {
+    updatedQuantity -= 1;
+  }
 
-  const updatedCart = await prisma.cartItem.update({
-    where: { id: cartItem.id },
-    data: { quantity: updatedQuantity },
-  });
-
-  return Response.json(updatedCart);
+  if (updatedQuantity <= 0) {
+    await prisma.cartItem.delete({
+      where: { id: cartItem.id },
+    });
+    return Response.json({ quantity: 0 });
+  } else {
+    const updatedCart = await prisma.cartItem.update({
+      where: { id: cartItem.id },
+      data: { quantity: updatedQuantity },
+    });
+    return Response.json(updatedCart);
+  }
 }

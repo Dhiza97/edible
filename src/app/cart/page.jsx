@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "@/src/context/CartContext";
-import { products } from "../assets/assets";
+import { AppContext } from "@/src/context/AppContext";
 
 const Cart = () => {
-  const { cart, addToCart, removeFromCart } = useCart();
+  const { cart, products } = useContext(AppContext);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const cartWithDetails = cart.map((item) => {

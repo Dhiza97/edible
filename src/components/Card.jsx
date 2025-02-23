@@ -6,7 +6,10 @@ import { IoHeartOutline } from "react-icons/io5";
 import { AppContext } from "../context/AppContext";
 
 const Card = ({ product }) => {
-  const { addToCart } = useContext(AppContext);
+  const { addToCart, cart, updateCartItem } = useContext(AppContext);
+
+  // Find the cart item for this product
+  const cartItem = cart.find((item) => item.productId === product.id);
 
   return (
     <div className="my-10">
@@ -30,12 +33,31 @@ const Card = ({ product }) => {
           <p className="mt-1.5 text-sm text-gray-700">
             ${product.price.toFixed(2)}
           </p>
-          <button
-            onClick={() => addToCart(product)}
-            className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105"
-          >
-            Add to Cart
-          </button>
+
+          {cartItem ? (
+            <div className="flex items-center justify-between mt-4 border border-gray-300 rounded-sm">
+              <button
+                onClick={() => updateCartItem(product.id, "decrease")}
+                className="w-10 h-10 bg-gray-200 text-gray-900 text-xl flex items-center justify-center"
+              >
+                -
+              </button>
+              <span className="text-lg font-medium">{cartItem.quantity}</span>
+              <button
+                onClick={() => updateCartItem(product.id, "increase")}
+                className="w-10 h-10 bg-gray-200 text-gray-900 text-xl flex items-center justify-center"
+              >
+                +
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => addToCart(product)}
+              className="block w-full mt-4 rounded-sm bg-[#EDF4C2] p-4 text-sm font-medium transition hover:scale-105"
+            >
+              Add to Cart
+            </button>
+          )}
         </div>
       </div>
     </div>

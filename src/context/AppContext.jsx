@@ -60,11 +60,18 @@ const AppContextProvider = (props) => {
     try {
       const res = await fetch(`/api/cart?userId=${userId}`);
       const data = await res.json();
-      if (res.ok) setCart(data.cart);
+      if (res.ok) setCart(Array.isArray(data.cart) ? data.cart : []);
     } catch (error) {
       console.error("Error fetching cart:", error);
+      setCart([]); // Prevents undefined issues
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchCart(user.id);
+    }
+  }, [user]);
 
   // Add to cart function
   const addToCart = async (product) => {
@@ -110,10 +117,22 @@ const AppContextProvider = (props) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id, productId, action }),
       });
-
+  
       if (res.ok) {
         const updatedCart = await res.json();
-        setCart(updatedCart);
+        setCart((prev) => {
+          const updatedItemIndex = prev.findIndex(item => item.productId === productId);
+          if (updatedItemIndex !== -1) {
+            if (updatedCart.quantity === 0) {
+              // Remove item from cart if quantity is zero
+              return [...prev.slice(0, updatedItemIndex), ...prev.slice(updatedItemIndex + 1)];
+            } else {
+              const updatedItem = { ...prev[updatedItemIndex], quantity: updatedCart.quantity };
+              return [...prev.slice(0, updatedItemIndex), updatedItem, ...prev.slice(updatedItemIndex + 1)];
+            }
+          }
+          return prev;
+        });
       }
     } catch (error) {
       console.error("Error updating cart:", error);
