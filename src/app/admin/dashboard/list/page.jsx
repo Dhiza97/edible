@@ -20,7 +20,8 @@ const List = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get("/api/products");
-      setProducts(response.data);
+      const sortedProducts = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setProducts(sortedProducts);
     } catch (err) {
       setError("Failed to fetch products");
     } finally {
