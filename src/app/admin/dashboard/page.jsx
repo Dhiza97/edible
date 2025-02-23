@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaBox, FaUsers, FaChartLine } from "react-icons/fa";
+import { FaBox, FaUsers, FaCheckCircle } from "react-icons/fa";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function AdminDashboard() {
           localStorage.removeItem("adminToken");
           router.push("/admin/login");
         } else {
-          setData(result);
+          setData(result.data);
         }
       } catch (error) {
         localStorage.removeItem("adminToken");
@@ -64,10 +64,12 @@ export default function AdminDashboard() {
           </div>
         </div>
         <div className="bg-white shadow-md rounded-lg p-6 flex items-center">
-          <FaChartLine className="text-3xl text-primaryColor mr-4" />
+          <FaCheckCircle className="text-3xl text-primaryColor mr-4" />
           <div>
-            <h2 className="text-xl font-semibold">Sales</h2>
-            <p className="text-gray-600">${data?.salesTotal || 0} Total Sales</p>
+            <h2 className="text-xl font-semibold">Completed Orders</h2>
+            <p className="text-gray-600">
+              {data?.completedOrdersCount || 0} Completed Orders
+            </p>
           </div>
         </div>
       </div>
@@ -89,9 +91,11 @@ export default function AdminDashboard() {
               data.recentOrders.map((order) => (
                 <tr key={order.id} className="text-center">
                   <td className="border p-2">{order.id}</td>
-                  <td className="border p-2">{order.customerName}</td>
-                  <td className="border p-2">{new Date(order.date).toLocaleDateString()}</td>
-                  <td className="border p-2">${order.total}</td>
+                  <td className="border p-2">{order.user.name}</td>
+                  <td className="border p-2">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="border p-2">${order.totalAmount}</td>
                   <td className="border p-2">{order.status}</td>
                 </tr>
               ))
