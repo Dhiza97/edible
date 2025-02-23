@@ -8,7 +8,7 @@ export default function DashboardLayout({ children }) {
       <hr />
       <div className="flex w-full">
         <Sidebar />
-        <div className="flex-1 p-4">{children}</div>
+        <div className="flex-1 p-4 ml-[18%] mt-[60px]">{children}</div>
       </div>
     </>
   );

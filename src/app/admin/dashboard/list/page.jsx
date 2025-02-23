@@ -95,10 +95,16 @@ const List = () => {
                   <td className="border p-2">{product.name}</td>
                   <td className="border p-2">{product.category}</td>
                   <td className="border p-2">${product.price}</td>
-                  <td className="border p-2">{`$${product.discountPrice ? product.discountPrice : 0}`}</td>
+                  <td className="border p-2">{`$${
+                    product.discountPrice ? product.discountPrice : 0
+                  }`}</td>
                   <td className="border p-2">{product.stock}</td>
                   <td className="border p-2">
-                    {product.isFeatured ? <FaSquareCheck className="text-xl mx-auto" /> : <MdCancel className="text-xl mx-auto" />}
+                    {product.isFeatured ? (
+                      <FaSquareCheck className="text-xl mx-auto" />
+                    ) : (
+                      <MdCancel className="text-xl mx-auto" />
+                    )}
                   </td>
                   <td className="border p-2 flex justify-center gap-2">
                     <button
@@ -146,6 +152,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
     stock: product.stock,
     isFeatured: product.isFeatured,
     category: product.category,
+    image: product.image,
   });
 
   const handleChange = (e) => {
@@ -154,6 +161,20 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({
+          ...formData,
+          image: reader.result,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -173,6 +194,33 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
       <div className="bg-white p-6 rounded-md shadow-lg w-96">
         <h3 className="text-lg font-semibold mb-4">Edit Product</h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <div className="flex justify-start mb-4">
+            {formData.image ? (
+              <Image
+                src={formData.image}
+                alt="Product Image"
+                width={100}
+                height={100}
+                className="rounded-md cursor-pointer"
+                onClick={() => document.getElementById("imageInput").click()}
+              />
+            ) : (
+              <span
+                className="text-gray-400 cursor-pointer"
+                onClick={() => document.getElementById("imageInput").click()}
+              >
+                No Image
+              </span>
+            )}
+            <input
+              type="file"
+              id="imageInput"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+          </div>
+
           <input
             type="text"
             name="name"
@@ -181,6 +229,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             className="border p-2 rounded-md outline-primaryColor"
             placeholder="Product Name"
           />
+
           <input
             type="number"
             name="price"
@@ -189,6 +238,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             className="border p-2 rounded-md outline-primaryColor"
             placeholder="Price"
           />
+
           <input
             type="number"
             name="discountPrice"
@@ -197,6 +247,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             className="border p-2 rounded-md outline-primaryColor"
             placeholder="Discount Price (Optional)"
           />
+
           <input
             type="number"
             name="stock"
@@ -205,6 +256,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             className="border w-20 p-2 rounded-md outline-primaryColor"
             placeholder="Stock"
           />
+
           <select
             name="category"
             value={formData.category}
@@ -218,6 +270,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             <option value="desserts">Desserts</option>
             <option value="drinks">Drinks</option>
           </select>
+
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -236,7 +289,10 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             >
               Cancel
             </button>
-            <button type="submit" className="bg-primaryColor text-white px-3 py-1 rounded-md">
+            <button
+              type="submit"
+              className="bg-primaryColor text-white px-3 py-1 rounded-md"
+            >
               Update
             </button>
           </div>

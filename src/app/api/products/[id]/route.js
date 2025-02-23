@@ -28,6 +28,7 @@ export async function PUT(req, context) {
     price: body.price ? parseFloat(body.price) : undefined,
     discountPrice: body.discountPrice ? parseFloat(body.discountPrice) : undefined,
     stock: body.stock ? parseInt(body.stock, 10) : undefined,
+    image: body.image || undefined,
   };
 
   try {
