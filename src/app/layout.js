@@ -22,7 +22,7 @@ const fruktur = Fruktur({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-  const isAdminRoute = pathname.startsWith("/admin");
+  const isAuthRoute = ["/login", "/register"].includes(pathname) || pathname.startsWith("/admin");
 
   return (
     <html lang="en" className="scroll-smooth">
@@ -33,10 +33,10 @@ export default function RootLayout({ children }) {
 
       <body className={`${poppins.className} ${fruktur.className} antialiased`}>
         <AppContextProvider>
-          {!isAdminRoute && <Navbar />}
+          {!isAuthRoute && <Navbar />}
           <ToastContainer position="top-right" autoClose={3000} theme="dark" />
           {children}
-          {!isAdminRoute && <Footer />}
+          {!isAuthRoute && <Footer />}
         </AppContextProvider>
       </body>
     </html>
