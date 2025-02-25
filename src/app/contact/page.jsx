@@ -42,7 +42,6 @@ const Contact = () => {
 
   return (
     <>
-      <Navbar />
       <div className="py-20 px-5 md:px-8 lg:px-[8%] min-h-screen flex flex-col items-center">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-Fruktur my-6 text-center">
           Contact <span className="text-primaryColor font-Fruktur">Us</span>
@@ -146,7 +145,6 @@ const Contact = () => {
           ></iframe>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

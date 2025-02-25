@@ -4,7 +4,6 @@ import { Poppins, Fruktur } from "next/font/google";
 import "./globals.css";
 import { ToastContainer, toast } from "react-toastify";
 import AppContextProvider from "../context/AppContext";
-import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { metadata } from "./metadata";

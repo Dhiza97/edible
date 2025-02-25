@@ -7,7 +7,6 @@ import { team } from "../assets/assets";
 const About = () => {
   return (
     <>
-      <Navbar />
       <div className="py-20 px-5 md:px-8 lg:px-[8%] min-h-screen flex flex-col items-center">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-Fruktur my-6 text-center">
           About <span className="text-primaryColor font-Fruktur">Us</span>
@@ -88,7 +87,6 @@ const About = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
