@@ -139,6 +139,57 @@ const AppContextProvider = (props) => {
     }
   };
 
+  // Increase quantity
+  const increaseQuantity = async (productId) => {
+    try {
+      const res = await fetch("/api/cart", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, productId, action: "increase" }),
+      });
+  
+      if (res.ok) {
+        fetchCart(user.id); // Refetch the cart from the database
+      }
+    } catch (error) {
+      console.error("Error increasing quantity:", error);
+    }
+  };
+
+  // Decrease quantity
+  const decreaseQuantity = async (productId) => {
+    try {
+      const res = await fetch("/api/cart", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, productId, action: "decrease" }),
+      });
+  
+      if (res.ok) {
+        fetchCart(user.id); // Refetch the cart from the database
+      }
+    } catch (error) {
+      console.error("Error decreasing quantity:", error);
+    }
+  };
+
+  // Remove item from cart
+  const removeFromCart = async (productId) => {
+    try {
+      const res = await fetch("/api/cart", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, productId }),
+      });
+  
+      if (res.ok) {
+        fetchCart(user.id); // Refetch the cart from the database
+      }
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -149,7 +200,10 @@ const AppContextProvider = (props) => {
         fetchCart,
         addToCart,
         updateCartItem,
-        products
+        products,
+        increaseQuantity,
+        decreaseQuantity,
+        removeFromCart,
       }}
     >
       {props.children}

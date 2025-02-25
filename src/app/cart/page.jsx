@@ -8,7 +8,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import CartTotal from "@/src/components/CartTotal";
 
 const Cart = () => {
-  const { cart, products } = useContext(AppContext);
+  const { cart, products, increaseQuantity, decreaseQuantity, removeFromCart } = useContext(AppContext);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const cartWithDetails = cart
@@ -66,23 +66,25 @@ const Cart = () => {
 
               <div className="flex items-center mt-2">
                 <button
-                  onClick={() => removeFromCart(product)}
-                  className="px-3 py-1 bg-[#DF9755] text-white rounded-md"
+                  className="px-3 py-1 bg-[#DF9755] text-white rounded-md hover:cursor-pointer"
+                  onClick={() => decreaseQuantity(product.id)}
                 >
                   -
                 </button>
+
                 <span className="mx-3">{product.quantity}</span>
+
                 <button
-                  onClick={() => addToCart(product)}
-                  className="px-3 py-1 bg-[#DF9755] text-white rounded-md"
+                  className="px-3 py-1 bg-[#DF9755] text-white rounded-md hover:cursor-pointer"
+                  onClick={() => increaseQuantity(product.id)}
                 >
                   +
                 </button>
               </div>
 
               <RiDeleteBin6Fill
-                onClick={() => removeFromCart(product)}
-                className="text-[#DF9755] text-2xl"
+                className="text-[#DF9755] text-2xl hover:cursor-pointer"
+                onClick={() => removeFromCart(product.id)}
               />
             </div>
           ))}
