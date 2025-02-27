@@ -196,7 +196,6 @@ const Page = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {currentProducts?.map((product, index) => {
-            console.log("Rendering Product:", product);
             return <Card key={product.id || index} product={product} />;
           })}
         </div>

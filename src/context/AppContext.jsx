@@ -9,6 +9,7 @@ const AppContextProvider = (props) => {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
+  const [likes, setLikes] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,6 +39,25 @@ const AppContextProvider = (props) => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      fetchCart(user.id);
+      fetchLikes(user.id);
+    }
+  }, [user]);
+
+  // Fetch likes
+  const fetchLikes = async (userId) => {
+    try {
+      const res = await fetch(`/api/likes?userId=${userId}`);
+      const data = await res.json();
+      if (res.ok) setLikes(Array.isArray(data.likes) ? data.likes : []);
+    } catch (error) {
+      console.error("Error fetching likes:", error);
+      setLikes([]);
+    }
+  };
+
   // Logout function
   const logout = async () => {
     try {
@@ -63,7 +83,7 @@ const AppContextProvider = (props) => {
       if (res.ok) setCart(Array.isArray(data.cart) ? data.cart : []);
     } catch (error) {
       console.error("Error fetching cart:", error);
-      setCart([]); // Prevents undefined issues
+      setCart([]);
     }
   };
 
@@ -226,6 +246,28 @@ const AppContextProvider = (props) => {
     }
   };
 
+  // Toggle like function
+  const toggleLike = async (productId) => {
+    if (!user) {
+      toast.error("Please log in to like products.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/likes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, productId }),
+      });
+
+      if (res.ok) {
+        fetchLikes(user.id); // Refetch the likes from the database
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -240,6 +282,8 @@ const AppContextProvider = (props) => {
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
+        likes,
+        toggleLike,
       }}
     >
       {props.children}
