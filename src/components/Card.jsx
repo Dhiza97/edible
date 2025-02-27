@@ -17,7 +17,7 @@ const Card = ({ product }) => {
         <button className="absolute end-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75">
           <IoHeartOutline className="text-xl" />
         </button>
-
+  
         <Image
           src={product.image}
           alt={product.name}
@@ -25,27 +25,23 @@ const Card = ({ product }) => {
           height={300}
           className="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
         />
-
+  
         <div className="relative border border-gray-100 bg-white p-6">
-          <h3 className="mt-4 text-lg font-medium text-gray-900">
-            {product.name}
-          </h3>
-          <p className="mt-1.5 text-sm text-gray-700">
-            ${product.price.toFixed(2)}
-          </p>
-
-          {cartItem ? (
+          <h3 className="mt-4 text-lg font-medium text-gray-900">{product.name}</h3>
+          <p className="mt-1.5 text-sm text-gray-700">${product.price.toFixed(2)}</p>
+  
+          {cartItem && cartItem.quantity > 0 ? (
             <div className="flex items-center justify-between mt-4 border border-gray-300 rounded-sm">
               <button
                 onClick={() => updateCartItem(product.id, "decrease")}
-                className="w-10 h-10 bg-gray-200 text-gray-900 text-xl flex items-center justify-center"
+                className="w-10 h-10 bg-[#EDF4C2] text-gray-900 text-xl flex items-center justify-center"
               >
                 -
               </button>
               <span className="text-lg font-medium">{cartItem.quantity}</span>
               <button
                 onClick={() => updateCartItem(product.id, "increase")}
-                className="w-10 h-10 bg-gray-200 text-gray-900 text-xl flex items-center justify-center"
+                className="w-10 h-10 bg-[#EDF4C2] text-gray-900 text-xl flex items-center justify-center"
               >
                 +
               </button>

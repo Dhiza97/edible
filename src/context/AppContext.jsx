@@ -111,7 +111,7 @@ const AppContextProvider = (props) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id, productId, action }),
       });
-
+  
       if (res.ok) {
         const updatedCart = await res.json();
         setCart((prev) => {
@@ -144,7 +144,7 @@ const AppContextProvider = (props) => {
       console.error("Error updating cart:", error);
     }
   };
-
+  
   // Increase quantity
   const increaseQuantity = async (productId) => {
     try {
