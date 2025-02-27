@@ -176,6 +176,12 @@ const AppContextProvider = (props) => {
   // Decrease quantity
   const decreaseQuantity = async (productId) => {
     try {
+      const item = cart.find((item) => item.productId === productId);
+      if (item && item.quantity <= 1) {
+        toast.error("Quantity cannot be less than 1");
+        return;
+      }
+  
       const res = await fetch("/api/cart", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -185,7 +191,7 @@ const AppContextProvider = (props) => {
           action: "decrease",
         }),
       });
-
+  
       if (res.ok) {
         const updatedItem = await res.json();
         setCart((prev) =>
