@@ -20,7 +20,7 @@ const AppContextProvider = (props) => {
         console.error("Error fetching products:", error);
       }
     };
-  
+
     fetchProducts();
   }, []);
 
@@ -80,11 +80,6 @@ const AppContextProvider = (props) => {
       return;
     }
 
-    console.log("Adding to cart:", {
-      userId: user.id,
-      productId: String(product.id),
-    });
-
     try {
       const res = await fetch("/api/cart", {
         method: "POST",
@@ -92,14 +87,13 @@ const AppContextProvider = (props) => {
         body: JSON.stringify({
           userId: user.id,
           productId: String(product.id),
+          addedAt: Date.now(),
         }),
       });
 
-      console.log("Response:", res);
-
       if (res.ok) {
         const newItem = await res.json();
-        setCart((prev) => [...prev, newItem]);
+        setCart((prev) => [...prev, { ...newItem, addedAt: Date.now() }]);
         toast.success(`${product.name} added to cart!`);
       } else {
         console.error("Failed to add to cart:", res.statusText);
@@ -117,18 +111,30 @@ const AppContextProvider = (props) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id, productId, action }),
       });
-  
+
       if (res.ok) {
         const updatedCart = await res.json();
         setCart((prev) => {
-          const updatedItemIndex = prev.findIndex(item => item.productId === productId);
+          const updatedItemIndex = prev.findIndex(
+            (item) => item.productId === productId
+          );
           if (updatedItemIndex !== -1) {
             if (updatedCart.quantity === 0) {
               // Remove item from cart if quantity is zero
-              return [...prev.slice(0, updatedItemIndex), ...prev.slice(updatedItemIndex + 1)];
+              return [
+                ...prev.slice(0, updatedItemIndex),
+                ...prev.slice(updatedItemIndex + 1),
+              ];
             } else {
-              const updatedItem = { ...prev[updatedItemIndex], quantity: updatedCart.quantity };
-              return [...prev.slice(0, updatedItemIndex), updatedItem, ...prev.slice(updatedItemIndex + 1)];
+              const updatedItem = {
+                ...prev[updatedItemIndex],
+                quantity: updatedCart.quantity,
+              };
+              return [
+                ...prev.slice(0, updatedItemIndex),
+                updatedItem,
+                ...prev.slice(updatedItemIndex + 1),
+              ];
             }
           }
           return prev;
@@ -145,11 +151,22 @@ const AppContextProvider = (props) => {
       const res = await fetch("/api/cart", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id, productId, action: "increase" }),
+        body: JSON.stringify({
+          userId: user.id,
+          productId,
+          action: "increase",
+        }),
       });
-  
+
       if (res.ok) {
-        fetchCart(user.id); // Refetch the cart from the database
+        const updatedItem = await res.json();
+        setCart((prev) =>
+          prev.map((item) =>
+            item.productId === productId
+              ? { ...item, quantity: updatedItem.quantity }
+              : item
+          )
+        );
       }
     } catch (error) {
       console.error("Error increasing quantity:", error);
@@ -162,11 +179,24 @@ const AppContextProvider = (props) => {
       const res = await fetch("/api/cart", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id, productId, action: "decrease" }),
+        body: JSON.stringify({
+          userId: user.id,
+          productId,
+          action: "decrease",
+        }),
       });
-  
+
       if (res.ok) {
-        fetchCart(user.id); // Refetch the cart from the database
+        const updatedItem = await res.json();
+        setCart((prev) =>
+          updatedItem.quantity === 0
+            ? prev.filter((item) => item.productId !== productId)
+            : prev.map((item) =>
+                item.productId === productId
+                  ? { ...item, quantity: updatedItem.quantity }
+                  : item
+              )
+        );
       }
     } catch (error) {
       console.error("Error decreasing quantity:", error);
@@ -181,7 +211,7 @@ const AppContextProvider = (props) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id, productId }),
       });
-  
+
       if (res.ok) {
         fetchCart(user.id); // Refetch the cart from the database
       }

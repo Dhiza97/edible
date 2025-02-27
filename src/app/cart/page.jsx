@@ -8,15 +8,19 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import CartTotal from "@/src/components/CartTotal";
 
 const Cart = () => {
-  const { cart, products, increaseQuantity, decreaseQuantity, removeFromCart } = useContext(AppContext);
+  const { cart, products, increaseQuantity, decreaseQuantity, removeFromCart } =
+    useContext(AppContext);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const cartWithDetails = cart
     .map((item) => {
       const product = products.find((p) => p.id === item.productId);
-      return product ? { ...product, quantity: item.quantity } : null;
+      return product
+        ? { ...product, quantity: item.quantity, addedAt: item.addedAt }
+        : null;
     })
-    .filter(Boolean);
+    .filter(Boolean)
+    .sort((a, b) => a.addedAt - b.addedAt);
 
   useEffect(() => {
     const total = cartWithDetails.reduce(
@@ -93,9 +97,7 @@ const Cart = () => {
             <div className="w-full sm:w-[450px]">
               <CartTotal />
               <div className="w-full text-end">
-                <button
-                  className="bg-black text-white text-sm my-8 px-8 py-3"
-                >
+                <button className="bg-black text-white text-sm my-8 px-8 py-3">
                   PROCEED TO CHECKOUT
                 </button>
               </div>
