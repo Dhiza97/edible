@@ -51,7 +51,11 @@ const AppContextProvider = (props) => {
     try {
       const res = await fetch(`/api/likes?userId=${userId}`);
       const data = await res.json();
-      if (res.ok) setLikes(Array.isArray(data.likes) ? data.likes : []);
+      if (res.ok) {
+        setLikes(Array.isArray(data.likes) ? data.likes : []);
+      } else {
+        console.error("Failed to fetch likes:", res.statusText);
+      }
     } catch (error) {
       console.error("Error fetching likes:", error);
       setLikes([]);
