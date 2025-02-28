@@ -135,7 +135,7 @@ const AppContextProvider = (props) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id, productId, action }),
       });
-  
+
       if (res.ok) {
         const updatedCart = await res.json();
         setCart((prev) => {
@@ -168,7 +168,7 @@ const AppContextProvider = (props) => {
       console.error("Error updating cart:", error);
     }
   };
-  
+
   // Increase quantity
   const increaseQuantity = async (productId) => {
     try {
@@ -201,11 +201,8 @@ const AppContextProvider = (props) => {
   const decreaseQuantity = async (productId) => {
     try {
       const item = cart.find((item) => item.productId === productId);
-      if (item && item.quantity <= 1) {
-        toast.error("Quantity cannot be less than 1");
-        return;
-      }
-  
+      if (!item) return;
+
       const res = await fetch("/api/cart", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -215,18 +212,21 @@ const AppContextProvider = (props) => {
           action: "decrease",
         }),
       });
-  
+
       if (res.ok) {
         const updatedItem = await res.json();
-        setCart((prev) =>
-          updatedItem.quantity === 0
-            ? prev.filter((item) => item.productId !== productId)
-            : prev.map((item) =>
-                item.productId === productId
-                  ? { ...item, quantity: updatedItem.quantity }
-                  : item
-              )
-        );
+
+        setCart((prev) => {
+          if (updatedItem.quantity === 0) {
+            return prev.filter((item) => item.productId !== productId);
+          } else {
+            return prev.map((item) =>
+              item.productId === productId
+                ? { ...item, quantity: updatedItem.quantity }
+                : item
+            );
+          }
+        });
       }
     } catch (error) {
       console.error("Error decreasing quantity:", error);
