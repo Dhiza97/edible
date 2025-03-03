@@ -6,11 +6,13 @@ import Link from "next/link";
 import { AppContext } from "@/src/context/AppContext";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import CartTotal from "@/src/components/CartTotal";
+import { useRouter } from "next/navigation";
 
 const Cart = () => {
   const { cart, products, increaseQuantity, decreaseQuantity, removeFromCart } =
     useContext(AppContext);
   const [totalPrice, setTotalPrice] = useState(0);
+  const router = useRouter();
 
   const cartWithDetails = cart
     .map((item) => {
@@ -29,6 +31,10 @@ const Cart = () => {
     );
     setTotalPrice(total);
   }, [cartWithDetails]);
+
+  const handleCheckout = () => {
+    router.push(`/place-order?total=${totalPrice}`);
+  };
 
   return (
     <div className="pt-20 px-5 lg:px-8 xl:px-[8%] mx-auto">
@@ -97,7 +103,10 @@ const Cart = () => {
             <div className="w-full sm:w-[450px]">
               <CartTotal />
               <div className="w-full text-end">
-                <button className="bg-black text-white text-sm my-8 px-8 py-3">
+                <button
+                  className="bg-black text-white text-sm my-8 px-8 py-3"
+                  onClick={handleCheckout}
+                >
                   PROCEED TO CHECKOUT
                 </button>
               </div>
