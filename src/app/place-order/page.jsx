@@ -51,8 +51,6 @@ const PlaceOrder = () => {
     // Extract token from local storage
     const token = localStorage.getItem("token");
   
-    console.log("Token:", token);
-  
     if (!token) {
       toast.error("Authorization token not found. Please log in.");
       return;
