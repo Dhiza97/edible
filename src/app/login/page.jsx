@@ -31,6 +31,7 @@ export default function Login() {
 
       if (response.ok) {
         toast.success(data.message);
+        localStorage.setItem("token", data.token);
         setUser(data.user);
         router.push("/");
       } else {
