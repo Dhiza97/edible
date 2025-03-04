@@ -272,6 +272,25 @@ const AppContextProvider = (props) => {
     }
   };
 
+  const clearCart = async () => {
+    if (!user) return; // Ensure there's a user
+  
+    try {
+      // Delete all cart items for the current user
+      await fetch("/api/cart/clear", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id }),
+      });
+  
+      setCart([]); // Clear the local state
+      localStorage.removeItem("cart"); // If you're using localStorage
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      toast.error("Failed to clear cart.");
+    }
+  };
+  
   return (
     <AppContext.Provider
       value={{
@@ -288,6 +307,7 @@ const AppContextProvider = (props) => {
         removeFromCart,
         likes,
         toggleLike,
+        clearCart,
       }}
     >
       {props.children}

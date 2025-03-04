@@ -3,12 +3,12 @@
 import CartTotal from "@/src/components/CartTotal";
 import Image from "next/image";
 import React, { useState, useEffect, useContext } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AppContext } from "@/src/context/AppContext";
 import { toast } from "react-toastify";
 
 const PlaceOrder = () => {
-  const { cart, products, user } = useContext(AppContext);
+  const { cart, products, user, clearCart } = useContext(AppContext);
   const [method, setMethod] = useState("cod");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -23,6 +23,7 @@ const PlaceOrder = () => {
   });
   const [totalPrice, setTotalPrice] = useState(0);
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     const total = searchParams.get("total");
@@ -72,6 +73,9 @@ const PlaceOrder = () => {
   
       const result = await response.json();
       toast.success("Order placed successfully!");
+
+      clearCart();
+      router.push("/orders");
     } catch (error) {
       console.error(error);
       toast.error("Error placing order");
