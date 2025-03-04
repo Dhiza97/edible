@@ -95,7 +95,7 @@ export default function AdminDashboard() {
               data.recentOrders.map((order) => (
                 <tr key={order.id} className="text-center">
                   <td className="border p-2">{order.id}</td>
-                  <td className="border p-2">{order.user.name}</td>
+                  <td className="border p-2">{order.User.name}</td> {/* Corrected field name */}
                   <td className="border p-2">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
