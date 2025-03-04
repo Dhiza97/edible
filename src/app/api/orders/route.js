@@ -6,7 +6,17 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Get All Orders
 export async function GET() {
-  const orders = await prisma.order.findMany();
+  const orders = await prisma.order.findMany({
+    include: {
+      orderItems: {
+        include: {
+          product: true,
+        },
+      },
+      shipping: true,
+      payments: true,
+    },
+  });
   return NextResponse.json(orders);
 }
 
