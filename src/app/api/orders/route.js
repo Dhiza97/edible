@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../lib/prisma";
 import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid"; // Import uuid for generating unique transactionId
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -81,9 +82,18 @@ export async function POST(req) {
             paymentMethod,
           },
         },
+        payments: {
+          create: {
+            paymentMethod,
+            amount: totalAmount,
+            status: "pending",
+            transactionId: uuidv4(),
+          },
+        },
       },
       include: {
         shipping: true,
+        payments: true,
       },
     });
 
