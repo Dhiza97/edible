@@ -29,7 +29,7 @@ const orders = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="border-t pt-20 px-20">
+    <div className="border-t pt-20 px-5 md:px-8 lg:px-[8%]">
       <div className="text-2xl text-start">
         <h2 className=" font-Fruktur my-6">
           MY <span className="text-primaryColor font-Fruktur">ORDERS</span>
