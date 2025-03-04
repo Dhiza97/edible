@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,26 +12,26 @@ model User {
   name                String
   email               String     @unique
   password            String
-  likes               Like[]
   image               String?
-  cart                CartItem[]
-  orders              Order[]
-  verifyOtp           String     @default("")
-  verifiedOtpExpireAt DateTime?
   isVerified          Boolean    @default(false)
   resetOtp            String     @default("")
   resetOtpExpireAt    DateTime?
+  verifiedOtpExpireAt DateTime?
+  verifyOtp           String     @default("")
+  cart                CartItem[]
+  likes               Like[]
+  orders              Order[]
 }
 
 model CartItem {
   id        String   @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   quantity  Int      @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Product {
@@ -52,72 +46,71 @@ model Product {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   cartItems     CartItem[]
-  orderItems    OrderItem[]
   likes         Like[]
+  orderItems    OrderItem[]
 }
 
 model Order {
-  id           String      @id @default(uuid())
-  userId       String
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  totalAmount  Float
-  status       String      @default("pending")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  orderItems   OrderItem[]
-  payment      Payment?
-  paymentId    String?
-  shippingInfo Shipping?
-  shippingId   String?
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  totalAmount Float
+
+  // Relations
+  orderItems OrderItem[]
+  payments   Payment?
+  shipping   Shipping?
+  User       User        @relation(fields: [userId], references: [id])
 }
 
 model OrderItem {
-  id        String   @id @default(uuid())
+  id        String @id @default(uuid())
   orderId   String
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  quantity  Int      @default(1)
-  price     Float // Store the price at the time of purchase
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  quantity  Int
+  price     Float
+
+  // Relation with Order
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
   id            String   @id @default(uuid())
   orderId       String   @unique
-  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   transactionId String   @unique
   amount        Float
-  paymentMethod String // "card", "bank transfer", "paypal", "cash on delivery"
+  paymentMethod String
   status        String   @default("pending")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Shipping {
   id            String   @id @default(uuid())
   orderId       String   @unique
-  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  firstName     String
-  lastName      String
-  email         String
-  street        String
   city          String
   state         String
   country       String
   phone         String
-  paymentMethod String   @default("cod") // Store payment method
   status        String   @default("processing")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  email         String
+  firstName     String
+  lastName      String
+  paymentMethod String   @default("cod")
+  street        String
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Like {
   id        String   @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
   productId String
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

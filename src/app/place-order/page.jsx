@@ -2,10 +2,13 @@
 
 import CartTotal from "@/src/components/CartTotal";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSearchParams } from "next/navigation";
+import { AppContext } from "@/src/context/AppContext";
+import { toast } from "react-toastify";
 
 const PlaceOrder = () => {
+  const { cart, products, user } = useContext(AppContext);
   const [method, setMethod] = useState("cod");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,20 +37,44 @@ const PlaceOrder = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    const orderItems = cart.map((item) => {
+      const product = products.find((p) => p.id === item.productId);
+      return {
+        productId: item.productId,
+        quantity: item.quantity,
+        price: product.price,
+      };
+    });
+  
+    // Extract token from local storage
+    const token = localStorage.getItem("token");
+  
+    console.log("Token:", token);
+  
+    if (!token) {
+      toast.error("Authorization token not found. Please log in.");
+      return;
+    }
+  
     try {
       const response = await fetch("/api/orders", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, totalAmount: totalPrice }),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        credentials: "include",
+        body: JSON.stringify({ ...formData, totalAmount: totalPrice, orderItems }),
       });
-
+  
       if (!response.ok) throw new Error("Failed to place order");
-
+  
       const result = await response.json();
-      alert("Order placed successfully!");
+      toast.success("Order placed successfully!");
     } catch (error) {
       console.error(error);
-      alert("Error placing order");
+      toast.error("Error placing order");
     }
   };
 

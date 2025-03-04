@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../lib/prisma";
+import jwt from "jsonwebtoken";
 
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Get All Orders
 export async function GET() {
@@ -10,6 +12,31 @@ export async function GET() {
 
 export async function POST(req) {
   try {
+    // Extract token from headers or cookies
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // order creation
     const {
       firstName,
       lastName,
@@ -21,24 +48,17 @@ export async function POST(req) {
       phone,
       paymentMethod,
       orderItems,
+      totalAmount,
     } = await req.json();
 
-    // Extract user ID from request (assuming it's available in the request headers)
-    const userId = req.headers.get("user-id");
-
-    // Calculate total amount
-    let totalAmount = 0;
-    for (const item of orderItems) {
-      const product = await prisma.product.findUnique({ where: { id: item.productId } });
-      totalAmount += product.price * item.quantity;
-    }
-
-    const order = await prisma.order.create({
+    const newOrder = await prisma.order.create({
       data: {
-        userId,
+        userId: user.id,
         totalAmount,
-        status: "pending",
-        shippingInfo: {
+        orderItems: {
+          create: orderItems,
+        },
+        shipping: {
           create: {
             firstName,
             lastName,
@@ -49,22 +69,21 @@ export async function POST(req) {
             country,
             phone,
             paymentMethod,
-            status: "processing",
           },
         },
-        orderItems: {
-          create: orderItems.map(item => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-        },
+      },
+      include: {
+        shipping: true,
       },
     });
 
-    return NextResponse.json(order);
+    return NextResponse.json(newOrder, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error(error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 
