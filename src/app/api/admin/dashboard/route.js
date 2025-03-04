@@ -14,14 +14,17 @@ export async function GET(req) {
     const completedOrdersCount = await prisma.order.count({
       where: { status: "completed" },
     });
+    console.log("Completed orders count:", completedOrdersCount);
+
     const recentOrders = await prisma.order.findMany({
       orderBy: { createdAt: "desc" },
       take: 5,
       include: {
-        user: true,
+        User: true,
         orderItems: true,
       },
     });
+    console.log("Recent orders:", recentOrders);
 
     return NextResponse.json({
       message: "Welcome Admin",
@@ -33,6 +36,7 @@ export async function GET(req) {
       },
     });
   } catch (error) {
+    console.error("Error fetching dashboard data:", error);
     return NextResponse.json({ message: "Server error", error: error.message }, { status: 500 });
   }
 }

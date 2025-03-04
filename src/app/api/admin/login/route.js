@@ -15,6 +15,8 @@ export async function POST(req) {
         // Generate JWT token
         const token = generateToken({ email, role: "admin" });
 
+        console.log("Token generated:", token);
+
         return NextResponse.json({ message: "Login successful", token });
     } catch (error) {
         return NextResponse.json({ message: "Server error", error: error.message }, { status: 500 });

@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaBox, FaUsers, FaCheckCircle } from "react-icons/fa";
@@ -10,6 +11,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
+    console.log("Token from localStorage:", token);
 
     if (!token) {
       router.push("/admin/login");
@@ -23,6 +25,7 @@ export default function AdminDashboard() {
         });
 
         const result = await res.json();
+        console.log("API response:", result);
 
         if (!res.ok) {
           localStorage.removeItem("adminToken");
@@ -31,6 +34,7 @@ export default function AdminDashboard() {
           setData(result.data);
         }
       } catch (error) {
+        console.log("Fetch error:", error);
         localStorage.removeItem("adminToken");
         router.push("/admin/login");
       } finally {
