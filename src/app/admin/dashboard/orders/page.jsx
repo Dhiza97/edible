@@ -31,9 +31,10 @@ const AdminOrders = () => {
       });
 
       if (response.ok) {
+        const updatedOrder = await response.json();
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
-            order.id === orderId ? { ...order, status } : order
+            order.id === orderId ? updatedOrder : order
           )
         );
       } else {
@@ -54,25 +55,35 @@ const AdminOrders = () => {
         >
           <TfiPackage className="text-7xl" />
           <div>
-            <p className="mt-3 mb-2 font-medium">
-              {order.shipping.firstName} {order.shipping.lastName}
-            </p>
-            <div>
-              <p>{order.shipping.street}</p>
-              <p>
-                {order.shipping.city}, {order.shipping.state},{" "}
-                {order.shipping.country}
-              </p>
-            </div>
-            <p>{order.shipping.phone}</p>
+            {order.shipping ? (
+              <>
+                <p className="mt-3 mb-2 font-medium">
+                  {order.shipping.firstName} {order.shipping.lastName}
+                </p>
+                <div>
+                  <p>{order.shipping.street}</p>
+                  <p>
+                    {order.shipping.city}, {order.shipping.state},{" "}
+                    {order.shipping.country}
+                  </p>
+                </div>
+                <p>{order.shipping.phone}</p>
+              </>
+            ) : (
+              <p>No shipping information available</p>
+            )}
           </div>
           <div>
             <p className="text-sm sm:text-[15px]">Items:</p>
-            {order.orderItems.map((item) => (
-              <p key={item.id}>
-                {item.product.name} - {item.quantity} x ${item.price}
-              </p>
-            ))}
+            {order.orderItems ? (
+              order.orderItems.map((item) => (
+                <p key={item.id}>
+                  {item.product.name} - {item.quantity} x ${item.price}
+                </p>
+              ))
+            ) : (
+              <p>No items available</p>
+            )}
             <p className="mt-3">Payment Method: {order.payments.paymentMethod}</p>
             <p>Payment status: {order.payments.status}</p>
             <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>

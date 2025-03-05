@@ -115,6 +115,12 @@ export async function PUT(req) {
     where: { id },
     data: { status },
     include: {
+      orderItems: {
+        include: {
+          product: true,
+        },
+      },
+      shipping: true,
       payments: true,
     },
   });
