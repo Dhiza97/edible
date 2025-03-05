@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../lib/prisma";
 import jwt from "jsonwebtoken";
-import { v4 as uuidv4 } from "uuid"; // Import uuid for generating unique transactionId
+import { v4 as uuidv4 } from "uuid";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -110,9 +110,22 @@ export async function POST(req) {
 // Update Order Status
 export async function PUT(req) {
   const { id, status } = await req.json();
+
   const updatedOrder = await prisma.order.update({
     where: { id },
     data: { status },
+    include: {
+      payments: true,
+    },
   });
+
+  // Check if the payment method is COD and the status is Delivered
+  if (updatedOrder.payments.paymentMethod === "cod" && status === "Delivered") {
+    await prisma.payment.update({
+      where: { id: updatedOrder.payments.id },
+      data: { status: "paid" },
+    });
+  }
+
   return NextResponse.json(updatedOrder);
 }
