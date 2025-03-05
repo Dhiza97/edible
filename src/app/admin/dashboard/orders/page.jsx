@@ -85,7 +85,7 @@ const AdminOrders = () => {
               <p>No items available</p>
             )}
             <p className="mt-3">Payment Method: {order.payments.paymentMethod}</p>
-            <p>Payment status: {order.payments.status}</p>
+            <p>Payment status: {order.payments && order.payments.length > 0 ? order.payments[0].status : "No payment info"}</p>
             <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
           </div>
           <p className="text-sm sm:text-[15px]">${order.totalAmount}</p>

@@ -86,7 +86,7 @@ export async function POST(req) {
           create: {
             paymentMethod,
             amount: totalAmount,
-            status: "pending",
+            status: paymentMethod === "cod" ? "pending" : "paid",
             transactionId: uuidv4(),
           },
         },
@@ -95,7 +95,7 @@ export async function POST(req) {
         shipping: true,
         payments: true,
       },
-    });
+    });    
 
     return NextResponse.json(newOrder, { status: 201 });
   } catch (error) {
@@ -111,27 +111,55 @@ export async function POST(req) {
 export async function PUT(req) {
   const { id, status } = await req.json();
 
-  const updatedOrder = await prisma.order.update({
-    where: { id },
-    data: { status },
-    include: {
-      orderItems: {
-        include: {
-          product: true,
+  try {
+    const updatedOrder = await prisma.order.update({
+      where: { id },
+      data: { status },
+      include: {
+        orderItems: {
+          include: {
+            product: true,
+          },
         },
+        shipping: true,
+        payments: true,
       },
-      shipping: true,
-      payments: true,
-    },
-  });
-
-  // Check if the payment method is COD and the status is Delivered
-  if (updatedOrder.payments.paymentMethod === "cod" && status === "Delivered") {
-    await prisma.payment.update({
-      where: { id: updatedOrder.payments.id },
-      data: { status: "paid" },
     });
-  }
 
-  return NextResponse.json(updatedOrder);
+    if (updatedOrder && updatedOrder.payments && updatedOrder.payments.length > 0) {
+      const payment = updatedOrder.payments[0]; // Assuming one payment per order
+
+      if (status === "Delivered") {
+        await prisma.payment.update({
+          where: { id: payment.id },
+          data: { status: "paid" },
+        });
+      } else if (payment.paymentMethod !== "cod") {
+        // For online payments, keep status as pending until delivered.
+        await prisma.payment.update({
+          where: { id: payment.id },
+          data: { status: "pending" },
+        });
+      }
+    }
+
+    const finalOrder = await prisma.order.findUnique({
+      where: { id },
+      include: {
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
+        shipping: true,
+        payments: true,
+      }
+    });
+
+    return NextResponse.json(finalOrder);
+
+  } catch (error) {
+    console.error("Error updating order:", error);
+    return NextResponse.json({ error: "Failed to update order" }, { status: 500 });
+  }
 }
