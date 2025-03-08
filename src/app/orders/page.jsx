@@ -11,7 +11,15 @@ const orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("/api/orders");
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("Authorization token not found");
+
+        const response = await fetch("/api/orders", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
         if (!response.ok) throw new Error("Failed to fetch orders");
         const data = await response.json();
         setOrderData(data);

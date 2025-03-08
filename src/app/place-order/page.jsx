@@ -64,16 +64,19 @@ const PlaceOrder = () => {
           "Authorization": `Bearer ${token}`
         },
         credentials: "include",
-        body: JSON.stringify({ ...formData, totalAmount: totalPrice, orderItems }),
+        body: JSON.stringify({ ...formData, totalAmount: totalPrice, orderItems, paymentMethod: method }),
       });
   
       if (!response.ok) throw new Error("Failed to place order");
   
       const result = await response.json();
-      toast.success("Order placed successfully!");
-
-      clearCart();
-      router.push("/orders");
+      if (method === "paystack") {
+        window.location.href = result.authorization_url;
+      } else {
+        toast.success("Order placed successfully!");
+        clearCart();
+        router.push("/orders");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Error placing order");
