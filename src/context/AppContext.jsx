@@ -10,6 +10,7 @@ const AppContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
   const [likes, setLikes] = useState([]);
+  const currency = "₦";
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -308,6 +309,7 @@ const AppContextProvider = (props) => {
         likes,
         toggleLike,
         clearCart,
+        currency,
       }}
     >
       {props.children}

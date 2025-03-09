@@ -6,7 +6,7 @@ import { IoHeartOutline, IoHeart } from "react-icons/io5";
 import { AppContext } from "../context/AppContext";
 
 const Card = ({ product }) => {
-  const { addToCart, cart, updateCartItem, toggleLike, likes } = useContext(AppContext);
+  const { addToCart, cart, updateCartItem, toggleLike, likes, currency } = useContext(AppContext);
 
   // Find the cart item for this product
   const cartItem = cart.find((item) => item.productId === product.id);
@@ -34,7 +34,7 @@ const Card = ({ product }) => {
 
         <div className="relative border border-gray-100 bg-white p-6">
           <h3 className="mt-4 text-lg font-medium text-gray-900">{product.name}</h3>
-          <p className="mt-1.5 text-sm text-gray-700">${product.price.toFixed(2)}</p>
+          <p className="mt-1.5 text-sm text-gray-700">{currency}{product.price.toFixed(2)}</p>
 
           {cartItem && cartItem.quantity > 0 ? (
             <div className="flex items-center justify-between mt-4 border border-gray-300 rounded-sm">

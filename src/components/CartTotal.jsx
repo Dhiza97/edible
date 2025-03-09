@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 
 const CartTotal = () => {
-  const { cart, products } = useContext(AppContext);
+  const { cart, products, currency } = useContext(AppContext);
   const [subtotal, setSubtotal] = useState(0);
   const shippingFee = 5.00; // Example shipping fee
 
@@ -28,17 +28,17 @@ const CartTotal = () => {
       <div className="flex flex-col gap-2 mt-2 text-sm text-black">
         <div className="flex justify-between">
           <p>Subtotal</p>
-          <p>${subtotal.toFixed(2)}</p>
+          <p>{currency}{subtotal.toFixed(2)}</p>
         </div>
         <hr />
         <div className="flex justify-between">
           <p>Shipping Fee</p>
-          <p>${shippingFee.toFixed(2)}</p>
+          <p>{currency}{shippingFee.toFixed(2)}</p>
         </div>
         <hr />
         <div className="flex justify-between">
           <b>Total</b>
-          <b>${(subtotal + shippingFee).toFixed(2)}</b>
+          <b>{currency}{(subtotal + shippingFee).toFixed(2)}</b>
         </div>
       </div>
     </div>
