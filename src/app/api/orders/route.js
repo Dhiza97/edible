@@ -54,6 +54,14 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
+  const origin = req.headers.get("origin");
+  if (!origin) {
+    return NextResponse.json(
+      { error: "Origin header is missing" },
+      { status: 400 }
+    );
+  }
+  
   try {
     // Extract token from headers or cookies
     const authHeader = req.headers.get("authorization");
@@ -118,7 +126,7 @@ export async function POST(req) {
           create: {
             paymentMethod,
             amount: totalAmount,
-            status: paymentMethod === "cod" ? "pending" : "paid",
+            status: "pending",
             transactionId: uuidv4(),
           },
         },
@@ -129,23 +137,9 @@ export async function POST(req) {
       },
     });
 
-    if (paymentMethod === "paystack") {
-      const paymentResponse = await paystack.transaction.initialize({
-        email: email,
-        amount: totalAmount * 100, // Paystack expects amount in kobo
-        reference: newOrder.payments[0].transactionId,
-        callback_url: `${process.env.BASE_URL}/api/orders/verify`,
-      });
-
-      return NextResponse.json(
-        { authorization_url: paymentResponse.data.authorization_url },
-        { status: 201 }
-      );
-    }
-
     return NextResponse.json(newOrder, { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.error("Error in POST /api/orders:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
