@@ -32,6 +32,18 @@ const PlaceOrder = () => {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    // Dynamically load Paystack script
+    const script = document.createElement("script");
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -71,7 +83,7 @@ const PlaceOrder = () => {
   
       const result = await response.json();
       if (method === "paystack") {
-        window.location.href = result.authorization_url;
+        handlePaystackPayment(result.authorization_url);
       } else {
         toast.success("Order placed successfully!");
         clearCart();
@@ -81,6 +93,27 @@ const PlaceOrder = () => {
       console.error(error);
       toast.error("Error placing order");
     }
+  };
+
+  const handlePaystackPayment = (authorizationUrl) => {
+    const handler = window.PaystackPop.setup({
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+      email: formData.email,
+      amount: totalPrice * 100,
+      currency: 'NGN',
+      ref: '' + Math.floor(Math.random() * 1000000000 + 1), // Generate a random reference number
+      callback: function(response) {
+        // Handle successful payment here
+        console.log('Payment successful. Transaction reference:', response.reference);
+        toast.success("Payment successful!");
+        clearCart();
+        router.push("/orders");
+      },
+      onClose: function() {
+        toast.error("Payment was not completed.");
+      }
+    });
+    handler.openIframe();
   };
 
   return (
