@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaBox, FaUsers, FaCheckCircle } from "react-icons/fa";
+import { AppContext } from "@/src/context/AppContext";
 
 export default function AdminDashboard() {
+  const { currency } = useContext(AppContext);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
-    console.log("Token from localStorage:", token);
 
     if (!token) {
       router.push("/admin/login");
@@ -49,8 +50,8 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-      <p className="mb-6">Welcome, admin! Here are your latest updates:</p>
+      <h1 className="text-3xl font-semibold mb-6">Admin <span className="bg-primaryColor text-[#EDF4C2] p-2 rounded-xl">Dashboard</span></h1>
+      <p className="mb-6">Welcome, Admin! Here are your latest updates:</p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="bg-white shadow-md rounded-lg p-6 flex items-center">
@@ -86,7 +87,7 @@ export default function AdminDashboard() {
               <th className="border p-2 font-semibold">Order ID</th>
               <th className="border p-2 font-semibold">Customer</th>
               <th className="border p-2 font-semibold">Date</th>
-              <th className="border p-2 font-semibold">Total</th>
+              <th className="border p-2 font-semibold">Amount</th>
               <th className="border p-2 font-semibold">Status</th>
             </tr>
           </thead>
@@ -99,7 +100,7 @@ export default function AdminDashboard() {
                   <td className="border p-2">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="border p-2">${order.totalAmount}</td>
+                  <td className="border p-2">{currency}{order.totalAmount}</td>
                   <td className="border p-2">{order.status}</td>
                 </tr>
               ))

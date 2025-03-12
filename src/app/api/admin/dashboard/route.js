@@ -14,7 +14,6 @@ export async function GET(req) {
     const completedOrdersCount = await prisma.order.count({
       where: { status: "completed" },
     });
-    console.log("Completed orders count:", completedOrdersCount);
 
     const recentOrders = await prisma.order.findMany({
       orderBy: { createdAt: "desc" },
@@ -24,7 +23,6 @@ export async function GET(req) {
         orderItems: true,
       },
     });
-    console.log("Recent orders:", recentOrders);
 
     return NextResponse.json({
       message: "Welcome Admin",

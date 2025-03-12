@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { FaSquareCheck } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
+import { AppContext } from "@/src/context/AppContext";
 
 const List = () => {
+  const { currency } = useContext(AppContext);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -95,9 +97,9 @@ const List = () => {
                   </td>
                   <td className="border p-2">{product.name}</td>
                   <td className="border p-2">{product.category}</td>
-                  <td className="border p-2">${product.price}</td>
-                  <td className="border p-2">{`$${
-                    product.discountPrice ? product.discountPrice : 0
+                  <td className="border p-2">{currency}{product.price.toLocaleString()}</td>
+                  <td className="border p-2">{`${currency}${
+                    product.discountPrice ? product.discountPrice.toLocaleString() : 0
                   }`}</td>
                   <td className="border p-2">{product.stock}</td>
                   <td className="border p-2">
@@ -267,8 +269,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             <option value="Combos">Combos</option>
             <option value="main-dishes">Main Dishes</option>
             <option value="side-dishes">Side Dishes</option>
-            <option value="appetizers">Appetizers</option>
-            <option value="desserts">Desserts</option>
+            <option value="snacks">Snacks</option>
             <option value="drinks">Drinks</option>
           </select>
 
