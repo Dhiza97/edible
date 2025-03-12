@@ -134,8 +134,7 @@ const AddItem = ({ token }) => {
             <option value="combos">Combos</option>
             <option value="main-dishes">Main Dishes</option>
             <option value="side-dishes">Side Dishes</option>
-            <option value="appetizers">Appetizers</option>
-            <option value="desserts">Desserts</option>
+            <option value="snacks">Snacks</option>
             <option value="drinks">Drinks</option>
           </select>
         </div>
