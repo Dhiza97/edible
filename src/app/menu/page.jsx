@@ -1,7 +1,5 @@
 "use client";
 
-import Footer from "@/src/components/Footer";
-import Navbar from "@/src/components/Navbar";
 import Image from "next/image";
 import React, { useState, useEffect, useContext } from "react";
 import Card from "@/src/components/Card";
@@ -16,8 +14,7 @@ const categories = [
   "Combos",
   "Main Dishes",
   "Side Dishes",
-  "Appetizers",
-  "Desserts",
+  "Snacks",
   "Drinks",
 ];
 
@@ -30,12 +27,15 @@ const Page = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setMenu(products);
+    setLoading(false);
   }, [products]);
 
   useEffect(() => {
+    setLoading(true);
     let filtered = products || [];
 
     // Filter by category
@@ -74,6 +74,7 @@ const Page = () => {
 
     setMenu(filtered);
     setCurrentPage(1);
+    setLoading(false);
   }, [selectedCategory, sortOption, searchQuery, products]);
 
   // Calculate total pages
@@ -194,41 +195,49 @@ const Page = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {currentProducts?.map((product, index) => {
-            return <Card key={product.id || index} product={product} />;
-          })}
-        </div>
-
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="mt-8 flex gap-3">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(currentPage - 1)}
-              className={`px-4 py-2 rounded-md ${
-                currentPage === 1 ? "bg-gray-300" : "bg-primaryColor text-white"
-              }`}
-            >
-              <GrPrevious />
-            </button>
-
-            <span className="px-4 py-2 bg-gray-200 rounded-md">
-              {currentPage} / {totalPages}
-            </span>
-
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage(currentPage + 1)}
-              className={`px-4 py-2 rounded-md ${
-                currentPage === totalPages
-                  ? "bg-gray-300"
-                  : "bg-primaryColor text-white"
-              }`}
-            >
-              <GrNext className="text-white" />
-            </button>
+        {loading ? (
+          <div className="flex justify-center items-center mt-20">
+            <p>Loading products...</p>
           </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {currentProducts?.map((product, index) => {
+                return <Card key={product.id || index} product={product} />;
+              })}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex gap-3">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === 1 ? "bg-gray-300" : "bg-primaryColor text-white"
+                  }`}
+                >
+                  <GrPrevious />
+                </button>
+
+                <span className="px-4 py-2 bg-gray-200 rounded-md">
+                  {currentPage} / {totalPages}
+                </span>
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === totalPages
+                      ? "bg-gray-300"
+                      : "bg-primaryColor text-white"
+                  }`}
+                >
+                  <GrNext className="text-white" />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </>
