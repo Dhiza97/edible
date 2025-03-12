@@ -82,7 +82,7 @@ export default function Login() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded mb-2"
+            className="w-full p-2 border rounded mb-2 outline-primaryColor"
             required
           />
           <input
@@ -90,7 +90,7 @@ export default function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded mb-4"
+            className="w-full p-2 border rounded mb-4 outline-primaryColor"
             required
           />
 
