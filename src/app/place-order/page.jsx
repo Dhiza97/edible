@@ -101,7 +101,7 @@ const PlaceOrder = () => {
       email: formData.email,
       amount: totalPrice * 100,
       currency: 'NGN',
-      ref: '' + Math.floor(Math.random() * 1000000000 + 1), // Generate a random reference number
+      ref: '' + Math.floor(Math.random() * 1000000000 + 1),
       callback: function(response) {
         // Handle successful payment here
         console.log('Payment successful. Transaction reference:', response.reference);
