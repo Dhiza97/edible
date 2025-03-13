@@ -56,13 +56,23 @@ model Order {
   updatedAt   DateTime @updatedAt
   userId      String
   status      String @default("processing")
-  totalAmount Float
+  price       Float  @default(0)
 
   // Relations
   orderItems OrderItem[]
   payments   Payment?
   shipping   Shipping?
   User       User        @relation(fields: [userId], references: [id])
+
+  firstName     String  @default("")
+  lastName      String  @default("")
+  email         String  @default("unknown@example.com")
+  street        String  @default("")
+  city          String  @default("")
+  state         String  @default("")
+  country       String  @default("")
+  phone         String  @default("")
+  paymentMethod String  @default("cod")
 }
 
 model OrderItem {
