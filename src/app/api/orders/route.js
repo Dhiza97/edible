@@ -2,11 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../lib/prisma";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
-import Paystack from "paystack";
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
-const paystack = new Paystack(PAYSTACK_SECRET_KEY);
 
 // Get All Orders
 export async function GET(req) {
@@ -53,6 +50,7 @@ export async function GET(req) {
   }
 }
 
+// Create Order
 export async function POST(req) {
   const origin = req.headers.get("origin");
   if (!origin) {
@@ -102,12 +100,23 @@ export async function POST(req) {
       price,
     } = await req.json();
 
+    if (!price) {
+      return NextResponse.json({ error: "Price is missing" }, { status: 400 });
+    }
+
     const newOrder = await prisma.order.create({
       data: {
         userId: user.id,
-        price,
+        price: parseFloat(price),
         orderItems: {
-          create: orderItems,
+          create: orderItems.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: parseFloat(item.price),
+            product: {
+              connect: { id: item.productId },
+            },
+          })),
         },
         shipping: {
           create: {
@@ -125,7 +134,7 @@ export async function POST(req) {
         payments: {
           create: {
             paymentMethod,
-            amount: price,
+            amount: parseFloat(price),
             status: "pending",
             transactionId: uuidv4(),
           },
@@ -205,49 +214,6 @@ export async function PUT(req) {
     console.error("Error updating order:", error);
     return NextResponse.json(
       { error: "Failed to update order" },
-      { status: 500 }
-    );
-  }
-}
-
-// Verify Paystack Payment
-export async function verifyPayment(req) {
-  const { reference } = await req.json();
-
-  try {
-    const verificationResponse = await paystack.transaction.verify(reference);
-
-    if (verificationResponse.data.status === "success") {
-      const payment = await prisma.payment.update({
-        where: { transactionId: reference },
-        data: { status: "paid" },
-      });
-
-      const order = await prisma.order.update({
-        where: { id: payment.orderId },
-        data: { status: "paid" },
-        include: {
-          orderItems: {
-            include: {
-              product: true,
-            },
-          },
-          shipping: true,
-          payments: true,
-        },
-      });
-
-      return NextResponse.json(order);
-    } else {
-      return NextResponse.json(
-        { error: "Payment verification failed" },
-        { status: 400 }
-      );
-    }
-  } catch (error) {
-    console.error("Error verifying payment:", error);
-    return NextResponse.json(
-      { error: "Failed to verify payment" },
       { status: 500 }
     );
   }

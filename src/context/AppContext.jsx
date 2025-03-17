@@ -113,6 +113,7 @@ const AppContextProvider = (props) => {
           userId: user.id,
           productId: String(product.id),
           addedAt: Date.now(),
+          price: parseFloat(product.price),
         }),
       });
 

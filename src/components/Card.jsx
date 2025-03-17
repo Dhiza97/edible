@@ -34,7 +34,7 @@ const Card = ({ product }) => {
 
         <div className="relative border border-gray-100 bg-white p-6">
           <h3 className="mt-4 text-lg font-medium text-gray-900">{product.name}</h3>
-          <p className="mt-1.5 text-sm text-gray-700">{currency}{product.price.toFixed(2)}</p>
+          <p className="mt-1.5 text-sm text-gray-700">{currency}{parseFloat(product.price).toFixed(2)}</p>
 
           {cartItem && cartItem.quantity > 0 ? (
             <div className="flex items-center justify-between mt-4 border border-gray-300 rounded-sm">

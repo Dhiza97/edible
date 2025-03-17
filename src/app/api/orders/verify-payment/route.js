@@ -15,6 +15,13 @@ export async function POST(req) {
     if (verificationResponse.data.status === "success") {
       // Ensure price is included in filteredOrderData and is a number
       const price = Number(orderData.price);
+if (isNaN(price)) {
+  return NextResponse.json(
+    { error: "Invalid price value" },
+    { status: 400 }
+  );
+}
+
       filteredOrderData.price = price;
 
       // Create order in the database

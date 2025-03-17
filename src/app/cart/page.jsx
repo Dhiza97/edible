@@ -9,8 +9,14 @@ import CartTotal from "@/src/components/CartTotal";
 import { useRouter } from "next/navigation";
 
 const Cart = () => {
-  const { cart, products, increaseQuantity, decreaseQuantity, removeFromCart } =
-    useContext(AppContext);
+  const {
+    cart,
+    products,
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+    currency,
+  } = useContext(AppContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const router = useRouter();
 
@@ -26,14 +32,14 @@ const Cart = () => {
 
   useEffect(() => {
     const total = cartWithDetails.reduce(
-      (sum, product) => sum + product.price * product.quantity,
+      (sum, product) => sum + parseFloat(product.price) * product.quantity,
       0
     );
     setTotalPrice(total);
   }, [cartWithDetails]);
 
   const handleCheckout = () => {
-    router.push(`/place-order?total=${totalPrice}`);
+    router.push(`/place-order?total=${totalPrice.toFixed(2)}`);
   };
 
   return (
@@ -70,7 +76,10 @@ const Cart = () => {
 
                 <div>
                   <h2 className="text-lg font-semibold">{product.name}</h2>
-                  <p className="text-gray-700">${product.price.toFixed(2)}</p>
+                  <p className="text-gray-700">
+                    {currency}
+                    {product.price.toFixed(2)}
+                  </p>
                 </div>
               </div>
 

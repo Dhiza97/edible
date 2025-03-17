@@ -8,7 +8,7 @@ import { AppContext } from "@/src/context/AppContext";
 import { toast } from "react-toastify";
 
 const PlaceOrder = () => {
-  const { cart, products, user, clearCart } = useContext(AppContext);
+  const { cart, user, clearCart } = useContext(AppContext);
   const [selectedShippingOptionId, setSelectedShippingOptionId] = useState(null);
   const [shippingFee, setShippingFee] = useState(0);
   const [method, setMethod] = useState("cod");
@@ -127,7 +127,10 @@ const PlaceOrder = () => {
     const orderItems = cart.map((item) => ({
       productId: item.id,
       quantity: item.quantity,
-      price: item.price,
+      price: parseFloat(item.price),
+      product: {
+        connect: { id: item.id },
+      },
     }));
   
     if (method === "paystack") {
@@ -143,7 +146,7 @@ const PlaceOrder = () => {
           credentials: "include",
           body: JSON.stringify({
             ...formData,
-            price: totalPrice + shippingFee,
+            price: parseFloat(totalPrice) + parseFloat(shippingFee),
             orderItems,
             paymentMethod: method,
           }),
@@ -185,19 +188,20 @@ const PlaceOrder = () => {
       paymentResponse.reference
     );
     toast.success("Payment successful!");
-
+  
     // Extract token from local storage
     const token = localStorage.getItem("token");
-
+  
     // Create order in the database after payment is verified
     try {
+      const price = totalPrice + shippingFee;
       console.log("orderData being sent:", {
         ...formData,
-        price: totalPrice + shippingFee,
+        price: price,
         orderItems,
         paymentMethod: method,
       });
-
+  
       const response = await fetch("/api/orders/verify-payment", {
         method: "POST",
         headers: {
@@ -210,7 +214,7 @@ const PlaceOrder = () => {
           userId: user.id,
           orderData: {
             ...formData,
-            price: totalPrice + shippingFee,
+            price: price,
             orderItems,
             paymentMethod: method,
           },
@@ -219,9 +223,9 @@ const PlaceOrder = () => {
           },
         }),
       });
-
+  
       if (!response.ok) throw new Error("Failed to create order");
-
+  
       clearCart();
       router.push("/orders");
     } catch (error) {
