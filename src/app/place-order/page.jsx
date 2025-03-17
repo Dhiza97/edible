@@ -125,7 +125,6 @@ const PlaceOrder = () => {
   
     // Define orderItems based on the items in the cart
     const orderItems = cart.map((item) => ({
-      productId: item.id,
       quantity: item.quantity,
       price: parseFloat(item.price),
       product: {

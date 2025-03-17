@@ -52,16 +52,8 @@ export async function GET(req) {
 
 // Create Order
 export async function POST(req) {
-  const origin = req.headers.get("origin");
-  if (!origin) {
-    return NextResponse.json(
-      { error: "Origin header is missing" },
-      { status: 400 }
-    );
-  }
-  
   try {
-    // Extract token from headers or cookies
+    // Extract token from headers
     const authHeader = req.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -85,7 +77,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // order creation
+    // Extract order data from request body
     const {
       firstName,
       lastName,
@@ -104,6 +96,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Price is missing" }, { status: 400 });
     }
 
+    // Create new order
     const newOrder = await prisma.order.create({
       data: {
         userId: user.id,
