@@ -109,22 +109,27 @@ const PlaceOrder = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    if (!selectedShippingOptionId) {
+      toast.error("Please select a shipping option.");
+      return;
+    }
+  
     // Extract token from local storage
     const token = localStorage.getItem("token");
-
+  
     if (!token) {
       toast.error("Authorization token not found. Please log in.");
       return;
     }
-
+  
     // Define orderItems based on the items in the cart
     const orderItems = cart.map((item) => ({
       productId: item.id,
       quantity: item.quantity,
       price: item.price,
     }));
-
+  
     if (method === "paystack") {
       handlePaystackPayment(orderItems);
     } else {
@@ -143,9 +148,9 @@ const PlaceOrder = () => {
             paymentMethod: method,
           }),
         });
-
+  
         if (!response.ok) throw new Error("Failed to place order");
-
+  
         toast.success("Order placed successfully!");
         clearCart();
         router.push("/orders");

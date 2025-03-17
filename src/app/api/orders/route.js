@@ -99,13 +99,13 @@ export async function POST(req) {
       phone,
       paymentMethod,
       orderItems,
-      totalAmount,
+      price,
     } = await req.json();
 
     const newOrder = await prisma.order.create({
       data: {
         userId: user.id,
-        totalAmount,
+        price,
         orderItems: {
           create: orderItems,
         },
@@ -125,7 +125,7 @@ export async function POST(req) {
         payments: {
           create: {
             paymentMethod,
-            amount: totalAmount,
+            amount: price,
             status: "pending",
             transactionId: uuidv4(),
           },
