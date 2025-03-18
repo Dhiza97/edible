@@ -119,7 +119,7 @@ const AppContextProvider = (props) => {
 
       if (res.ok) {
         const newItem = await res.json();
-        setCart((prev) => [...prev, { ...newItem, addedAt: Date.now() }]);
+        setCart((prev) => [...prev, { ...newItem, addedAt: Date.now(), price: parseFloat(product.price)}]);
         toast.success(`${product.name} added to cart!`);
       } else {
         console.error("Failed to add to cart:", res.statusText);

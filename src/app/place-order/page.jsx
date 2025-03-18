@@ -4,12 +4,13 @@ import CartTotal from "@/src/components/CartTotal";
 import Image from "next/image";
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AppContext } from "@/src/context/AppContext";
 import { toast } from "react-toastify";
+import { AppContext } from "@/src/context/AppContext";
 
 const PlaceOrder = () => {
-  const { cart, user, clearCart } = useContext(AppContext);
-  const [selectedShippingOptionId, setSelectedShippingOptionId] = useState(null);
+  const { user, cart, clearCart } = useContext(AppContext);
+  const [selectedShippingOptionId, setSelectedShippingOptionId] =
+    useState(null);
   const [shippingFee, setShippingFee] = useState(0);
   const [method, setMethod] = useState("cod");
   const [formData, setFormData] = useState({
@@ -109,129 +110,58 @@ const PlaceOrder = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    if (!user) {
+      toast.error("Please log in to place an order.");
+      return;
+    }
     if (!selectedShippingOptionId) {
       toast.error("Please select a shipping option.");
       return;
     }
-  
-    // Extract token from local storage
-    const token = localStorage.getItem("token");
-  
-    if (!token) {
-      toast.error("Authorization token not found. Please log in.");
-      return;
-    }
-  
-    // Define orderItems based on the items in the cart
-    const orderItems = cart.map((item) => ({
-      quantity: item.quantity,
-      price: parseFloat(item.price),
-      product: {
-        connect: { id: item.id },
-      },
-    }));
-  
-    if (method === "paystack") {
-      handlePaystackPayment(orderItems);
-    } else {
-      try {
-        const response = await fetch("/api/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            ...formData,
-            price: parseFloat(totalPrice) + parseFloat(shippingFee),
-            orderItems,
-            paymentMethod: method,
-          }),
-        });
-  
-        if (!response.ok) throw new Error("Failed to place order");
-  
-        toast.success("Order placed successfully!");
-        clearCart();
-        router.push("/orders");
-      } catch (error) {
-        console.error(error);
-        toast.error("Error placing order");
-      }
-    }
-  };
 
-  const handlePaystackPayment = (orderItems) => {
-    const handler = window.PaystackPop.setup({
-      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-      email: formData.email,
-      amount: (totalPrice + shippingFee) * 100,
-      currency: "NGN",
-      ref: "" + Math.floor(Math.random() * 1000000000 + 1),
-      callback: function (paymentResponse) {
-        handlePaymentSuccess(paymentResponse, orderItems);
-      },
-      onClose: function () {
-        toast.error("Payment was not completed.");
-      },
-    });
-    handler.openIframe();
-  };
-
-  const handlePaymentSuccess = async (paymentResponse, orderItems) => {
-    // Handle successful payment here
-    console.log(
-      "Payment successful. Transaction reference:",
-      paymentResponse.reference
-    );
-    toast.success("Payment successful!");
-  
-    // Extract token from local storage
-    const token = localStorage.getItem("token");
-  
-    // Create order in the database after payment is verified
     try {
-      const price = totalPrice + shippingFee;
-      console.log("orderData being sent:", {
-        ...formData,
-        price: price,
-        orderItems,
-        paymentMethod: method,
-      });
-  
-      const response = await fetch("/api/orders/verify-payment", {
+      console.log(cart);
+      
+      const orderItems = cart.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
-        credentials: "include",
         body: JSON.stringify({
-          reference: paymentResponse.reference,
+          ...formData,
           userId: user.id,
-          orderData: {
-            ...formData,
-            price: price,
-            orderItems,
-            paymentMethod: method,
-          },
-          shippingData: {
-            ...formData,
-          },
+          orderItems: orderItems,
+          shippingFee: shippingFee,
+          totalPrice: totalPrice + shippingFee,
+          paymentMethod: method,
+          shippingOptionId: selectedShippingOptionId,
         }),
       });
-  
-      if (!response.ok) throw new Error("Failed to create order");
-  
-      clearCart();
-      router.push("/orders");
+
+      if (response.ok) {
+        toast.success("Order placed successfully!");
+        clearCart();
+        router.push("/orders"); // Redirect to orders page
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to place order.");
+      }
     } catch (error) {
-      console.error(error);
-      toast.error("Error creating order");
+      console.error("Error placing order:", error);
+      toast.error("An error occurred while placing your order.");
     }
   };
+
+  const handlePaystackPayment = (orderItems) => {};
+
+  const handlePaymentSuccess = async () => {};
 
   return (
     <form
@@ -328,18 +258,25 @@ const PlaceOrder = () => {
         {/* Shipping Options */}
         <div className="mt-8">
           <h2 className="text-2xl font-Fruktur my-6 text-center">
-            Shipping <span className="text-primaryColor font-Fruktur">Options</span>
+            Shipping{" "}
+            <span className="text-primaryColor font-Fruktur">Options</span>
           </h2>
           <div className="flex flex-col gap-2">
             {shippingOptions.map((option) => (
               <div
                 key={option.id}
                 onClick={() => handleShippingChange(option)}
-                className={`flex items-center justify-between border p-2 px-3 cursor-pointer ${selectedShippingOptionId === option.id ? 'bg-gray-100' : ''}`}
+                className={`flex items-center justify-between border p-2 px-3 cursor-pointer ${
+                  selectedShippingOptionId === option.id ? "bg-gray-100" : ""
+                }`}
               >
                 <div className="flex items-center gap-3">
                   <p
-                    className={`min-w-3.5 h-3.5 border rounded-full ${selectedShippingOptionId === option.id ? 'bg-green-400' : ''}`}
+                    className={`min-w-3.5 h-3.5 border rounded-full ${
+                      selectedShippingOptionId === option.id
+                        ? "bg-green-400"
+                        : ""
+                    }`}
                   ></p>
                   <p className="text-sm">{option.name}</p>
                 </div>
