@@ -67,7 +67,7 @@ export async function POST(req) {
       paymentMethod,
       shippingFee,
       totalPrice,
-      shippingOptionId,
+      shippingOptionId
     } = await req.json();
 
     console.log(orderItems);
@@ -115,10 +115,7 @@ export async function POST(req) {
     return NextResponse.json(order);
   } catch (error) {
     console.error("Error creating order:", error);
-    return NextResponse.json(
-      { error: "Failed to create order." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create order." }, { status: 500 });
   }
 }
 

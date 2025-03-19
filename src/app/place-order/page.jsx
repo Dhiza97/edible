@@ -120,46 +120,86 @@ const PlaceOrder = () => {
       return;
     }
 
-    try {
-      console.log(cart);
-      
-      const orderItems = cart.map((item) => ({
-        productId: item.productId,
-        quantity: item.quantity,
-        price: item.price,
-      }));
+    console.log(cart);
 
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          userId: user.id,
-          orderItems: orderItems,
-          shippingFee: shippingFee,
-          totalPrice: totalPrice + shippingFee,
-          paymentMethod: method,
-          shippingOptionId: selectedShippingOptionId,
-        }),
-      });
+    const orderItems = cart.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      price: item.price,
+    }));
 
-      if (response.ok) {
-        toast.success("Order placed successfully!");
-        clearCart();
-        router.push("/orders"); // Redirect to orders page
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.error || "Failed to place order.");
+    const orderData = {
+      ...formData,
+      userId: user.id,
+      orderItems: orderItems,
+      shippingFee: shippingFee,
+      totalPrice: totalPrice + shippingFee,
+      paymentMethod: method,
+      shippingOptionId: selectedShippingOptionId,
+    };
+
+    if (method === "cod") {
+      try {
+        const response = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        });
+
+        if (response.ok) {
+          toast.success("Order placed successfully!");
+          clearCart();
+          router.push("/orders");
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.error || "Failed to place order.");
+        }
+      } catch (error) {
+        console.error("Error placing order:", error);
+        toast.error("An error occurred while placing your order.");
       }
-    } catch (error) {
-      console.error("Error placing order:", error);
-      toast.error("An error occurred while placing your order.");
+    } else if (method === "paystack") {
+      handlePaystackPayment(orderData);
     }
   };
 
-  const handlePaystackPayment = (orderItems) => {};
+  const handlePaystackPayment = (orderData) => {
+    const handler = window.PaystackPop.setup({
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+      email: formData.email,
+      amount: orderData.totalPrice * 100,
+      currency: "NGN",
+      onSuccess: async (transaction) => {
+        console.log("Transaction successful:", transaction);
+        try {
+          const response = await fetch("/api/orders/paystack", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...orderData, transaction }),
+          });
+
+          if (response.ok) {
+            const order = await response.json();
+            console.log("Order created:", order);
+            toast.success("Payment successful! Order placed.");
+            clearCart();
+            router.push("/orders");
+          } else {
+            const errorData = await response.json();
+            console.error("Error response from server:", errorData);
+            toast.error(errorData.error || "Failed to place order.");
+          }
+        } catch (error) {
+          console.error("Error placing order:", error);
+          toast.error("An error occurred during payment.");
+        }
+      },
+      onClose: () => {
+        toast.error("Payment was not successful.");
+      },
+    });
+    handler.openIframe();
+  };
 
   const handlePaymentSuccess = async () => {};
 
