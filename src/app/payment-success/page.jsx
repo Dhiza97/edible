@@ -2,13 +2,10 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, Suspense } from "react";
 import { AppContext } from "@/src/context/AppContext";
-import { Suspense } from "react";
 
-const PaymentSuccessContent = () => {
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get("orderId");
+const PaymentSuccessContent = ({ orderId }) => {
   const { clearCart } = useContext(AppContext);
   const hasClearedCart = useRef(false);
 
@@ -36,9 +33,12 @@ const PaymentSuccessContent = () => {
 };
 
 const PaymentSuccess = () => {
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get("orderId");
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <PaymentSuccessContent />
+      <PaymentSuccessContent orderId={orderId} />
     </Suspense>
   );
 };
