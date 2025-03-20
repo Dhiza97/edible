@@ -29,6 +29,15 @@ export async function GET(req) {
     const { status, data: transactionData } = response.data;
 
     if (status === true && transactionData.status === "success") {
+      const userId = transactionData.metadata.userId;
+
+      if (!userId) {
+        console.error("User ID is missing in transaction metadata.");
+        return NextResponse.redirect(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/payment-failed`
+        );
+      }
+
       // Update order status to paid
       await prisma.order.update({
         where: { id: orderId },
@@ -42,6 +51,11 @@ export async function GET(req) {
           },
           paymentStatus: "paid",
         },
+      });
+
+      // Clear cart items
+      await prisma.cartItem.deleteMany({
+        where: { userId: userId },
       });
 
       // Redirect to success page

@@ -71,6 +71,9 @@ export async function POST(req) {
           amount: (totalPrice + shippingFee) * 100, // Convert to kobo
           reference: `PAYSTACK_${order.id}_${Date.now()}`,
           callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/verify?orderId=${order.id}`,
+          metadata: {
+            userId: userId,
+          },
         },
         {
           headers: {
@@ -127,60 +130,6 @@ export async function POST(req) {
     console.error("Error initializing payment:", error);
     return NextResponse.json(
       { error: "Failed to initialize payment." },
-      { status: 500 }
-    );
-  }
-}
-
-// Verify Paystack Payment
-export async function PUT(req) {
-  try {
-    const data = await req.json();
-    const { orderId, reference } = data;
-
-    // Verify transaction with Paystack
-    const response = await axios.get(
-      `https://api.paystack.co/transaction/verify/${reference}`,
-      {
-        headers: {
-          Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
-        },
-      }
-    );
-
-    const { status, data: transactionData } = response.data;
-
-    if (status === true && transactionData.status === "success") {
-      // Update order status to paid
-      const updatedOrder = await prisma.order.update({
-        where: { id: orderId },
-        data: {
-          payments: {
-            create: {
-              transactionId: transactionData.reference,
-              amount: transactionData.amount / 100, // Convert back to base currency
-              paymentMethod: "paystack",
-            },
-          },
-          paymentStatus: "paid",
-        },
-      });
-
-      return NextResponse.json({
-        success: true,
-        message: "Payment verified successfully.",
-        updatedOrder,
-      });
-    } else {
-      return NextResponse.json(
-        { success: false, message: "Payment verification failed." },
-        { status: 400 }
-      );
-    }
-  } catch (error) {
-    console.error("Error verifying payment:", error);
-    return NextResponse.json(
-      { error: "Failed to verify payment." },
       { status: 500 }
     );
   }
