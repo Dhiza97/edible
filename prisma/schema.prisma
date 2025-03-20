@@ -73,6 +73,7 @@ model Order {
   country       String  @default("")
   phone         String  @default("")
   paymentMethod String  @default("cod")
+  paymentStatus String  @default("pending")
 }
 
 model OrderItem {

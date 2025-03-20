@@ -87,18 +87,6 @@ const PlaceOrder = () => {
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    // Dynamically load Paystack script
-    const script = document.createElement("script");
-    script.src = "https://js.paystack.co/v1/inline.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -120,8 +108,6 @@ const PlaceOrder = () => {
       return;
     }
 
-    console.log(cart);
-
     const orderItems = cart.map((item) => ({
       productId: item.productId,
       quantity: item.quantity,
@@ -138,8 +124,9 @@ const PlaceOrder = () => {
       shippingOptionId: selectedShippingOptionId,
     };
 
-    if (method === "cod") {
-      try {
+    try {
+      if (method === "cod") {
+        // Handle Cash on Delivery
         const response = await fetch("/api/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -154,54 +141,34 @@ const PlaceOrder = () => {
           const errorData = await response.json();
           toast.error(errorData.error || "Failed to place order.");
         }
-      } catch (error) {
-        console.error("Error placing order:", error);
-        toast.error("An error occurred while placing your order.");
+      } else if (method === "paystack") {
+        // Handle Paystack Payment
+        const response = await fetch("/api/orders/paystack", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Error response:", errorText);
+          toast.error("Failed to initialize payment.");
+          return;
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          // Redirect to Paystack payment page
+          window.location.replace(data.authorization_url);
+        } else {
+          toast.error(data.message || "Failed to initialize payment.");
+        }
       }
-    } else if (method === "paystack") {
-      handlePaystackPayment(orderData);
+    } catch (error) {
+      console.error("Error placing order:", error);
+      toast.error("An error occurred while placing your order.");
     }
   };
-
-  const handlePaystackPayment = (orderData) => {
-    const handler = window.PaystackPop.setup({
-      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-      email: formData.email,
-      amount: orderData.totalPrice * 100,
-      currency: "NGN",
-      onSuccess: async (transaction) => {
-        console.log("Transaction successful:", transaction);
-        try {
-          const response = await fetch("/api/orders/paystack", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...orderData, transaction }),
-          });
-
-          if (response.ok) {
-            const order = await response.json();
-            console.log("Order created:", order);
-            toast.success("Payment successful! Order placed.");
-            clearCart();
-            router.push("/orders");
-          } else {
-            const errorData = await response.json();
-            console.error("Error response from server:", errorData);
-            toast.error(errorData.error || "Failed to place order.");
-          }
-        } catch (error) {
-          console.error("Error placing order:", error);
-          toast.error("An error occurred during payment.");
-        }
-      },
-      onClose: () => {
-        toast.error("Payment was not successful.");
-      },
-    });
-    handler.openIframe();
-  };
-
-  const handlePaymentSuccess = async () => {};
 
   return (
     <form
