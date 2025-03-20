@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { sendVerificationEmail } from "@/src/utils/nodemailer";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import rateLimit from "@/src/app/lib/rateLimit";
@@ -35,9 +34,6 @@ export async function POST(req) {
         verifiedOtpExpireAt: otpExpireTime,
       },
     });
-
-    // Send new OTP email
-    await sendVerificationEmail(email, newOtp);
 
     return NextResponse.json(
       { message: "New OTP sent to email" },
