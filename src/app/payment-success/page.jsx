@@ -1,11 +1,10 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useContext, useEffect, useRef, Suspense } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { AppContext } from "@/src/context/AppContext";
 
-const PaymentSuccessContent = ({ orderId }) => {
+const PaymentSuccess = ({ orderId }) => {
   const { clearCart } = useContext(AppContext);
   const hasClearedCart = useRef(false);
 
@@ -19,9 +18,6 @@ const PaymentSuccessContent = ({ orderId }) => {
   return (
     <div className="text-center min-h-screen flex flex-col items-center justify-center">
       <h1 className="text-3xl font-bold text-green-600">Payment Successful!</h1>
-      <p className="mt-4">
-        Your order ID is: <strong>{orderId}</strong>
-      </p>
       <p className="mt-2">Thank you for your purchase!</p>
       <Link href="/orders">
         <button className="mt-6 bg-primaryColor text-white px-6 py-2 rounded">
@@ -29,17 +25,6 @@ const PaymentSuccessContent = ({ orderId }) => {
         </button>
       </Link>
     </div>
-  );
-};
-
-const PaymentSuccess = () => {
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get("orderId");
-
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <PaymentSuccessContent orderId={orderId} />
-    </Suspense>
   );
 };
 
