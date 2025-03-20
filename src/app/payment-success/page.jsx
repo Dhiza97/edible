@@ -4,8 +4,9 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useContext, useEffect, useRef } from "react";
 import { AppContext } from "@/src/context/AppContext";
+import { Suspense } from "react";
 
-const PaymentSuccess = () => {
+const PaymentSuccessContent = () => {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
   const { clearCart } = useContext(AppContext);
@@ -31,6 +32,14 @@ const PaymentSuccess = () => {
         </button>
       </Link>
     </div>
+  );
+};
+
+const PaymentSuccess = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 };
 
