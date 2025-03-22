@@ -2,7 +2,7 @@
 
 import CartTotal from "@/src/components/CartTotal";
 import Image from "next/image";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { AppContext } from "@/src/context/AppContext";
