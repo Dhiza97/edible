@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { AppContext } from "@/src/context/AppContext";
 
-const PlaceOrder = () => {
+const PlaceOrderContent = () => {
   const { user, cart, clearCart } = useContext(AppContext);
   const [selectedShippingOptionId, setSelectedShippingOptionId] =
     useState(null);
@@ -352,6 +352,14 @@ const PlaceOrder = () => {
         </div>
       </div>
     </form>
+  );
+};
+
+const PlaceOrder = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PlaceOrderContent />
+    </Suspense>
   );
 };
 
