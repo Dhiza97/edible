@@ -40,7 +40,7 @@ const Hero = () => {
     <div className="relative w-full h-screen overflow-hidden px-5 lg:px-8 xl:px-[8%] pt-24 bg-black">
       {/* Background Video */}
       <video
-        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+        className="absolute inset-0 w-full h-full object-cover z-0"
         autoPlay
         loop
         muted
