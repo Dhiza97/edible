@@ -9,6 +9,7 @@ import Footer from "../components/Footer";
 import { metadata } from "./metadata";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ const fruktur = Fruktur({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
   const isAuthRoute = ["/login", "/register"].includes(pathname) || pathname.startsWith("/admin");
 
   return (
@@ -35,7 +37,21 @@ export default function RootLayout({ children }) {
         <AppContextProvider>
           {!isAuthRoute && <Navbar />}
           <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-          {children}
+          <AnimatePresence mode="wait">
+            <motion.main
+              key={pathname}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
+              }
+            >
+              {children}
+            </motion.main>
+          </AnimatePresence>
           {!isAuthRoute && <Footer />}
         </AppContextProvider>
       </body>
