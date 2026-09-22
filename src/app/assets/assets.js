@@ -16,22 +16,21 @@ export const category = [
     image: <IoFastFood />,
     name: "Combos",
     description: "Discover our wide range of burgers, pizzas, and smoothies.",
-    link: "/combos",
+    link: "/menu?category=Combos",
   },
   {
     id: 2,
     image: <RiDrinks2Fill />,
     name: "Drinks",
-    description:
-      "Experience our fresh and healthy options of beverages.",
-    link: "/drinks",
+    description: "Experience our fresh and healthy options of beverages.",
+    link: "/menu?category=Drinks",
   },
   {
     id: 3,
     image: <LuDessert />,
     name: "Desserts",
     description: "Indulge in our delicious sweet treats.",
-    link: "/desserts",
+    link: "/menu?category=Desserts",
   },
   {
     id: 4,
@@ -39,7 +38,7 @@ export const category = [
     name: "Main Dish",
     description:
       "Get your favorite meal cooked to perfection with our fresh ingredients.",
-    link: "/main-dishes",
+    link: "/menu?category=Main%20Dishes",
   },
 ];
 

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState, useEffect, useContext } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Card from "@/src/components/Card";
 import { IoChevronDownOutline, IoFilterOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
@@ -9,17 +10,44 @@ import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { AppContext } from "@/src/context/AppContext";
 
-const categories = [
+const defaultCategories = [
   "All",
   "Combos",
   "Main Dishes",
   "Side Dishes",
   "Snacks",
   "Drinks",
+  "Desserts",
 ];
+
+const normalizeCategory = (value = "") => {
+  const normalized = value.trim().replace(/[-_]+/g, " ").replace(/\s+/g, " ").toLowerCase();
+
+  switch (normalized) {
+    case "combo":
+      return "Combos";
+    case "main dish":
+      return "Main Dishes";
+    case "side dish":
+      return "Side Dishes";
+    case "drink":
+      return "Drinks";
+    case "dessert":
+      return "Desserts";
+    default:
+      return normalized
+        .split(" ")
+        .filter(Boolean)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+  }
+};
 
 const Page = () => {
   const { products } = useContext(AppContext);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [menu, setMenu] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("default");
@@ -28,11 +56,47 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
+  const categories = Array.from(
+    new Set([
+      ...defaultCategories,
+      ...products
+        .map((product) => normalizeCategory(product.category))
+        .filter(Boolean),
+    ])
+  );
+
+  useEffect(() => {
+    const requestedCategory = normalizeCategory(searchParams.get("category") || "All");
+
+    setSelectedCategory(
+      requestedCategory && requestedCategory !== "All"
+        ? requestedCategory
+        : "All"
+    );
+  }, [searchParams]);
 
   useEffect(() => {
     setMenu(products);
     setLoading(false);
   }, [products]);
+
+  const handleCategoryChange = (category) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (category === "All") {
+      params.delete("category");
+    } else {
+      params.set("category", category);
+    }
+
+    const nextQuery = params.toString();
+
+    setSelectedCategory(category);
+    setShowDropdown(false);
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, {
+      scroll: false,
+    });
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -41,9 +105,7 @@ const Page = () => {
     // Filter by category
     if (selectedCategory !== "All") {
       filtered = products?.filter(
-        (product) =>
-          product.category.replace(/\s+/g, "-").toLowerCase() ===
-          selectedCategory.replace(/\s+/g, "-").toLowerCase()
+        (product) => normalizeCategory(product.category) === selectedCategory
       );
     }
 
@@ -147,10 +209,7 @@ const Page = () => {
                   <button
                     key={category}
                     className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left"
-                    onClick={() => {
-                      setSelectedCategory(category);
-                      setShowDropdown(false);
-                    }}
+                    onClick={() => handleCategoryChange(category)}
                   >
                     {category}
                   </button>
@@ -169,7 +228,7 @@ const Page = () => {
                     ? "bg-primaryColor text-white"
                     : "bg-gray-200 text-gray-700"
                 }`}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => handleCategoryChange(category)}
               >
                 {category}
               </button>
