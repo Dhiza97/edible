@@ -37,7 +37,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden px-5 lg:px-8 xl:px-[8%] pt-24">
+    <div className="relative w-full h-screen overflow-hidden px-5 lg:px-8 xl:px-[8%] pt-24 bg-black">
       {/* Background Video */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
@@ -46,7 +46,6 @@ const Hero = () => {
         muted
         playsInline
         preload="metadata"
-        poster="/image_1.jpg"
       >
         <source src="/bg_video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
