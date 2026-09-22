@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect, useContext } from "react";
+import React, { Suspense, useState, useEffect, useContext } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Card from "@/src/components/Card";
 import { IoChevronDownOutline, IoFilterOutline } from "react-icons/io5";
@@ -43,7 +43,7 @@ const normalizeCategory = (value = "") => {
   }
 };
 
-const Page = () => {
+const MenuPageContent = () => {
   const { products } = useContext(AppContext);
   const router = useRouter();
   const pathname = usePathname();
@@ -300,6 +300,14 @@ const Page = () => {
         )}
       </div>
     </>
+  );
+};
+
+const Page = () => {
+  return (
+    <Suspense fallback={<div className="py-20 px-5 md:px-8 lg:px-[8%] min-h-screen">Loading menu...</div>}>
+      <MenuPageContent />
+    </Suspense>
   );
 };
 
