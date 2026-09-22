@@ -23,14 +23,14 @@ export const category = [
     image: <RiDrinks2Fill />,
     name: "Drinks",
     description:
-      "Experience our fresh and healthy options in our smoothie bar.",
+      "Experience our fresh and healthy options of beverages.",
     link: "/drinks",
   },
   {
     id: 3,
     image: <LuDessert />,
     name: "Desserts",
-    description: "Indulge in our delicious pizza toppings and crusts.",
+    description: "Indulge in our delicious sweet treats.",
     link: "/desserts",
   },
   {
@@ -38,7 +38,7 @@ export const category = [
     image: <FaBowlFood />,
     name: "Main Dish",
     description:
-      "Get your favorite pasta cooked to perfection with our fresh ingredients.",
+      "Get your favorite meal cooked to perfection with our fresh ingredients.",
     link: "/main-dishes",
   },
 ];
