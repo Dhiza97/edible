@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
         <AppContextProvider>
           {!isAuthRoute && <Navbar />}
           <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.main
               key={pathname}
               initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
